@@ -437,6 +437,8 @@ enum SquadStances
 
 #define SQUAD_NAMELEN 40
 
+class Creature;
+
 struct squadst
 {
    char name[SQUAD_NAMELEN];
