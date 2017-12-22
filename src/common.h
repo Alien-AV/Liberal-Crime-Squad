@@ -1,17 +1,35 @@
+/**
+ * Seme utility definitions.
+ *
+ * This file includes useful macros and functions for universal use, not just in
+ * .cpp files, but in .h files too. Having them in includes.h isn't good enough
+ * because then they are not accessible to header files that are included in
+ * includes.h. You can't have 2 header files both include each other. Thus this
+ * file was designed to be something any file could include and make full use
+ * of, with general-purpose functions and macros that help simplify common
+ * coding tasks.
+ */
 /*
-    File created by Rich McGrew.
-
-    This file includes useful macros and functions for universal use, not just
-    in .cpp files, but in .h files too. Having them in includes.h isn't good
-    enough because then they are not accessible to header files that are
-    included in includes.h. You can't have 2 header files both include each
-    other. Thus this file was designed to be something any file could include
-    and make full use of, with general-purpose functions and macros that help
-    simplify common coding tasks.
-
-    All code released under GNU GPL.
-*/
-
+ * Copyright 2013, 2014 Rich McGrew (yetisyny)
+ * Copyright 2017 Stephen M. Webb  <stephen.webb@bregmasoft.ca>
+ *
+ * This file is part of Liberal Crime Squad.
+ *
+ * Liberal Crime Squad is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
+ */
 #ifndef COMMON_H_INCLUDED
 #define COMMON_H_INCLUDED
 
@@ -19,104 +37,85 @@
 //#define DONT_INCLUDE_SDL
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #ifdef HAVE_LANGINFO_H
-#include <langinfo.h>
+#  include <langinfo.h>
 #endif
 
 #ifdef _WIN32
-   #include <windows.h>
+#  define WIN32_LEAN_AND_MEAN
+#  include <windows.h>
 
 #  ifdef KEY_EVENT
-#   undef KEY_EVENT
+#    undef KEY_EVENT
 #  endif
 #  ifdef MOUSE_MOVED
-#   undef MOUSE_MOVED
+#    undef MOUSE_MOVED
 #  endif
-   #define GO_PORTABLE
-   #include <io.h> //needed for unlink()
-   #include <direct.h>
-   #ifndef __STRICT_ANSI__
-      #define HAS_STRICMP
-   #endif
-   //Visual C++ .NET (7) includes the STL with vector, so we
-   //will use that, otherwise the HP STL Vector.h will be used.
-   #ifdef __MINGW32__
-      #include <vector>
-      #include <map>
-   #else
-      #if _MSC_VER > 1200
-         #define WIN32_DOTNET
-         #include <ciso646> // alternate keywords included in the ISO C++ standard
-                            // but not directly supported by Microsoft Visual Studio C++
-         #include <vector>
-         #include <map>
-      #else
-         #define WIN32_PRE_DOTNET
-         #include "vector.h"
-         #include "map.h"
-      #endif
-   #endif
+#  include <io.h> //needed for unlink()
+#  include <direct.h>
+#  ifndef __STRICT_ANSI__
+#    define HAS_STRICMP
+#  endif
+#  if defined(_MSC_VER) && _MSC_VER <= 1200
+#    error "Requires MSVC++ 7.0 or later"
+#  endif
+#  include <vector>
+#  include <map>
 
-   //#define PDC_WIDE // uncomment this if and only if you want to use UTF-8 version of PDCurses (from pdc34dllu.zip instead of pdc34dllw.zip)... the "U" version
-   #include <curses.h>
-   //undo PDCurses macros that break vector class
-   #undef erase
-   #undef clear
+//# define PDC_WIDE // uncomment this if and only if you want to use UTF-8 version of PDCurses (from pdc34dllu.zip instead of pdc34dllw.zip)... the "U" version
+#  include <curses.h>
+//undo PDCurses macros that break vector class
+#  undef erase
+#  undef clear
 
-   #define CH_USE_CP437 // this works best with the "W" version of PDCurses on Windows (from pdc34dllw.zip instead of pdc34dllu.zip)... it's the standard way we do it
-   //#define CH_USE_ASCII_HACK // this works with either the "W" or "U" version of PDCurses just fine either way, as it only uses standard ASCII characters (ugly though)
-   //#define CH_USE_UNICODE // this only works on Windows with the UTF-8 version of PDCurses (the "U" version), and if you have the PDC_WIDE define above uncommented
+#  define CH_USE_CP437 // this works best with the "W" version of PDCurses on Windows (from pdc34dllw.zip instead of pdc34dllu.zip)... it's the standard way we do it
+//#define CH_USE_ASCII_HACK // this works with either the "W" or "U" version of PDCurses just fine either way, as it only uses standard ASCII characters (ugly though)
+//#define CH_USE_UNICODE // this only works on Windows with the UTF-8 version of PDCurses (the "U" version), and if you have the PDC_WIDE define above uncommented
 #else
-   #include <vector>
-   #include <map>
-   #include <ctype.h>
-   #include <unistd.h>
-   #define GO_PORTABLE
+#  include <vector>
+#  include <map>
+#  include <ctype.h>
+#  include <unistd.h>
 
-   #if defined(HAVE_WIDE_NCURSES) && defined(__STDC_ISO_10646__)
-     #define CH_USE_UNICODE
-   #else
-     #define CH_USE_ASCII_HACK
-   #endif
+#  if defined(HAVE_WIDE_NCURSES) && defined(__STDC_ISO_10646__)
+#    define CH_USE_UNICODE
+#  else
+#    define CH_USE_ASCII_HACK
+#  endif
 
-   #ifdef HAVE_LIBXCURSES
-      #define XCURSES
-   #endif
-   #ifdef HAVE_LIBNCURSES
-      #define NCURSES
-   #endif
-   #ifdef XCURSES
-      #define HAVE_PROTO 1
-      #define CPLUSPLUS  1
-      /* Try these PDCurses/Xcurses options later...
-      #define FAST_VIDEO
-      #define REGISTERWINDOWS
-      */
-      #include <xcurses.h> //This is the X11 Port of PDCurses
-   //undo PDCurses macros that break vector class
-      #undef erase // FIXME: Umm... Now erase() and clear() don't work in
-      #undef clear //       dumpcaps.cpp
-   #else
-      #if defined(USE_NCURSES)
-         #include <ncurses.h>
-         #define NCURSES
-      #elif defined(USE_NCURSES_W)
-         #include <ncursesw/ncurses.h>
-         #define NCURSES
-      #elif defined(NCURSES)
-         #define USE_NCURSES
-         #include <ncurses.h>
-      #else
-         #include <curses.h>
-      #endif
-      // Undo mvaddstr macro and re-implement as function to support overloading
-      //#ifdef mvaddstr
-      //   #undef mvaddstr
-      //   inline int mvaddstr(int y,int x,const char* text) { int ret=move(y,x); if(ret!=ERR) ret=addstr(text); return ret; }
-      //#endif
-   #endif
+#  ifdef HAVE_LIBXCURSES
+#    define XCURSES
+#  endif
+#  ifdef HAVE_LIBNCURSES
+#    define NCURSES
+#  endif
+#  ifdef XCURSES
+#    define HAVE_PROTO 1
+#    define CPLUSPLUS  1
+/* Try these PDCurses/Xcurses options later...
+#    define FAST_VIDEO
+#    define REGISTERWINDOWS
+*/
+#    include <xcurses.h> //This is the X11 Port of PDCurses
+//undo PDCurses macros that break vector class
+#    undef erase // FIXME: Umm... Now erase() and clear() don't work in
+#    undef clear //       dumpcaps.cpp
+#  else
+#    if defined(USE_NCURSES)
+#      include <ncurses.h>
+#      define NCURSES
+#    elif defined(USE_NCURSES_W)
+#      include <ncursesw/ncurses.h>
+#      define NCURSES
+#    elif defined(NCURSES)
+#      define USE_NCURSES
+#      include <ncurses.h>
+#    else
+#      include <curses.h>
+#    endif
+#  endif
 #endif
 
 #ifndef CH_USE_CP437
@@ -135,44 +134,42 @@
 #endif
 
 /* Headers for Portability */
-#ifdef GO_PORTABLE
-   #include <time.h>
+#include <time.h>
 
-   #if defined __linux__ || defined __APPLE__ // BSD and SVr4 too
-      /*
-      This #undef addstr...It exists only to make the overloaded addstr
-         work in linux (because otherwise it clashes with ncurses).
-         The normal addstr works fine for me, so I have no idea what's going on.
-         I'll just leave this warning here...If addstr breaks or something, it
-         might be related to this undefine. At this point in time though, at least
-         on my machine, everything's working just fine.
+#if defined __linux__ || defined __APPLE__ // BSD and SVr4 too
+/*
+This #undef addstr...It exists only to make the overloaded addstr
+   work in linux (because otherwise it clashes with ncurses).
+   The normal addstr works fine for me, so I have no idea what's going on.
+   I'll just leave this warning here...If addstr breaks or something, it
+   might be related to this undefine. At this point in time though, at least
+   on my machine, everything's working just fine.
 
-      This still strikes me as being odd, though. :/
-      Oh well, I just hope it'll work for everybody.
+This still strikes me as being odd, though. :/
+Oh well, I just hope it'll work for everybody.
 
-      Ciprian Ilies, September 26, 2012
-      */
-      #undef addstr
-      #include <sys/time.h>
-      #include <signal.h>
-   #endif
+Ciprian Ilies, September 26, 2012
+*/
+# undef addstr
+# include <sys/time.h>
+# include <signal.h>
 #endif
 
 #ifdef _WIN32
-#ifdef __STRICT_ANSI__ /* mbctype.h doesn't work in strict ansi mode so this hack makes it work */
-#define STRICT_ANSI_TEMP_OFF
-#undef __STRICT_ANSI__
-#endif
-#include <mbctype.h>
-#ifdef STRICT_ANSI_TEMP_OFF
-#define __STRICT_ANSI__
-#undef STRICT_ANSI_TEMP_OFF
-#endif /* this is also the end of the hack, now the compiler is back to the mode it was in before */
+# ifdef __STRICT_ANSI__ /* mbctype.h doesn't work in strict ansi mode so this hack makes it work */
+#  define STRICT_ANSI_TEMP_OFF
+#  undef __STRICT_ANSI__
+# endif
+# include <mbctype.h>
+# ifdef STRICT_ANSI_TEMP_OFF
+#  define __STRICT_ANSI__
+#  undef STRICT_ANSI_TEMP_OFF
+# endif /* this is also the end of the hack, now the compiler is back to the mode it was in before */
 #endif
 
 #ifndef DONT_INCLUDE_SDL
-#include "sdl/SDL.h"
-#include "sdl/SDL_mixer.h"
+# include "sdl/SDL.h"
+# include "sdl/SDL_mixer.h"
 #endif // DONT_INCLUDE_SDL
 
 #include <string.h>
