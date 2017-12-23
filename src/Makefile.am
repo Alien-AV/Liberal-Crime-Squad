@@ -74,7 +74,8 @@ libcrimesquad_la_SOURCES = \
  title/highscore.cpp title/newgame.cpp title/saveload.cpp basemode/basemode.cpp\
  title/titlescreen.cpp\
  title/initfile.cpp \
- locations/worls.h             locations/world.cpp \
+ locations/districttype.h      locations/districttype.cpp \
+ locations/world.h             locations/world.cpp \
  locations/locations.h         locations/locations.cpp \
  vehicle/vehicle.h             vehicle/vehicle.cpp \
  vehicle/vehicletype.cpp vehicle/vehicletype.h items/weapontype.h\

@@ -28,6 +28,7 @@ test_lcs_SOURCES = \
   creature/test-creaturetypecache.cpp \
   creature/test-skill.cpp \
   creature/test-uniquecreatures.cpp \
+  locations/test-districttype.cpp \
   politics/test-alignment.cpp \
   vehicle/test-vehicletype.cpp
 
