@@ -55,6 +55,7 @@ libcrimesquad_la_SOURCES = \
  items/weapon.cpp items/weapon.h items/weapontype.cpp items/armor.h\
  lcsio.cpp cursesmovie.cpp compat.cpp\
  locationdef.h basemode/activate_sleepers.cpp \
+ locations/city.h              locations/city.cpp \
  locations/district.h          locations/district.cpp \
  locations/districttype.h      locations/districttype.cpp \
  locations/world.h             locations/world.cpp \
