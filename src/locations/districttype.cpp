@@ -29,7 +29,7 @@
 namespace
 {
   const std::string DISTRICTTYPE_XML_ELEMENT{"districttype"};
-  const std::string DISTRICTTYPE_XML_IDNAME_ELEMENT{"idname"};
+  const std::string DISTRICTTYPE_XML_IDNAME_ATTRIBUTE{"idname"};
   const std::string DISTRICTTYPE_XML_NAME_ELEMENT{"name"};
   const std::string DISTRICTTYPE_XML_DESCRIPTION_ELEMENT{"description"};
 
@@ -78,18 +78,16 @@ load_from_xml(std::string const& xml)
   auto e = doc.FirstChildElement();
   if ((e != nullptr) && (e->Name() == DISTRICTTYPE_XML_ELEMENT))
   {
+    const char* val = e->Attribute(DISTRICTTYPE_XML_IDNAME_ATTRIBUTE.c_str());
+    if (val)
+    {
+      this->idname_ = val;
+    }
+
     for (auto element = e->FirstChildElement(); element; element = element->NextSiblingElement())
     {
       std::string tag = element->Name();
-      if (tag == DISTRICTTYPE_XML_IDNAME_ELEMENT)
-      {
-        char const* val = element->GetText();
-        if (val)
-        {
-          this->idname_ = val;
-        }
-      }
-      else if (tag == DISTRICTTYPE_XML_NAME_ELEMENT)
+      if (tag == DISTRICTTYPE_XML_NAME_ELEMENT)
       {
         char const* val = element->GetText();
         if (val)

@@ -58,6 +58,7 @@ libcrimesquad_la_SOURCES = \
  locations/city.h              locations/city.cpp \
  locations/district.h          locations/district.cpp \
  locations/districttype.h      locations/districttype.cpp \
+ locations/districttypecache.h locations/districttypecache.cpp \
  locations/world.h             locations/world.cpp \
  locations/locations.h         locations/locations.cpp \
  monthly/justice.h             monthly/justice.cpp \

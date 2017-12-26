@@ -31,6 +31,7 @@ test_lcs_SOURCES = \
   locations/test-city.cpp \
   locations/test-district.cpp \
   locations/test-districttype.cpp \
+  locations/test-districttypecache.cpp \
   politics/test-alignment.cpp \
   vehicle/test-vehicletype.cpp
 
