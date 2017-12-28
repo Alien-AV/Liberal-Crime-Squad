@@ -1,4 +1,3 @@
-#include <iostream>
 /**
  * Implementation of the DistrictTypeCache component.
  */
@@ -39,7 +38,7 @@ DistrictTypeCache::
 
 
 void DistrictTypeCache::
-load_from_xml_string(std::string const& xml)
+load_from_xml(std::string const& xml)
 {
   tinyxml2::XMLDocument doc;
   tinyxml2::XMLError err = doc.Parse(xml.c_str());
@@ -69,7 +68,6 @@ get_by_idname(std::string const& idname) const
 {
   for (auto const& d: district_type_bag_)
   {
-std::cerr << "==smw> " << __FUNCTION__ << "() d.idname()=\"" << d.idname() << "\" idname=\"" << idname << "\"\n";
     if (d.idname() == idname)
     {
       return &d;

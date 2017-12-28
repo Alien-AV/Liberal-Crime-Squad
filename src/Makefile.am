@@ -80,6 +80,7 @@ libcrimesquad_la_SOURCES = \
  title/highscore.cpp title/newgame.cpp title/saveload.cpp basemode/basemode.cpp\
  title/titlescreen.cpp\
  title/initfile.cpp \
+ typecache.h                   typecache.cpp \
  vehicle/vehicle.h             vehicle/vehicle.cpp \
  vehicle/vehicletype.cpp vehicle/vehicletype.h items/weapontype.h\
  externs.h              globals.cpp \

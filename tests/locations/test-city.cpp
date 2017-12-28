@@ -23,6 +23,9 @@
  */
 #include "catch/catch.hpp"
 #include "locations/city.h"
+#include "locations/districttypecache.h"
+#include "typecache.h"
+
 
 SCENARIO("default-constructed City")
 {
@@ -41,6 +44,16 @@ SCENARIO("default-constructed City")
 
 SCENARIO("City loaded from XML")
 {
+  TypeCache test_typecache;
+  test_typecache.district_type_cache->load_from_xml("<districts>"
+                                                      "<districttype idname=\"DOWNTOWN\">"
+                                                        "<name>Downtown</name>"
+                                                      "</districttype>"
+                                                      "<districttype idname=\"UNIVERSITY\">"
+                                                        "<name>University</name>"
+                                                      "</districttype>"
+                                                    "</districts>");
+
   GIVEN("a default-constructed city")
   {
     City city;
@@ -50,14 +63,27 @@ SCENARIO("City loaded from XML")
       std::string test_description{"City of Lights"};
       std::string test_xml{"<city name=\"" + test_name + "\">"
                              "<description>" + test_description + "</description>"
+                             "<districts>"
+                               "<district idname=\"DOWNTOWN\"/>"
+                               "<district idname=\"UNIVERSITY\">"
+                                 "<name>State College</name>"
+                               "</district>"
+                               "<district idname=\"UNIVERSITY\">"
+                                 "<name>Ivy-League College</name>"
+                               "</district>"
+                             "</districts>"
                            "</city>"};
-      city.load_from_xml(test_xml);
+      city.load_from_xml(test_typecache, test_xml);
       THEN("it has expected values")
       {
         REQUIRE(city.name() == test_name);
         REQUIRE(city.shortname() == test_name);
         REQUIRE(city.description() == test_description);
-        REQUIRE(city.districts_begin() == city.districts_end());
+        REQUIRE(city.districts_end() - city.districts_begin() == 3);
+
+        auto d = city.districts_begin();
+        ++d;
+        REQUIRE(d->name() == "State College");
       }
     }
   }

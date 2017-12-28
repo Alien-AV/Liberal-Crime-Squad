@@ -23,7 +23,10 @@
  */
 #include "locations/city.h"
 
+#include "externs.h"
+#include "locations/districttypecache.h"
 #include "tinyxml2.h"
+#include "typecache.h"
 
 
 namespace
@@ -32,6 +35,8 @@ namespace
   const std::string CITY_XML_NAME_ATTRIBUTE{"name"};
   const std::string CITY_XML_DESCRIPTION_ELEMENT{"description"};
   const std::string CITY_XML_DISTRICTS_ELEMENT{"districts"};
+  const std::string DISTRICT_XML_ELEMENT{"district"};
+  const std::string DISTRICT_XML_IDNAME_ATTRIBUTE{"idname"};
 } // anonmymous namespace
 
 const std::string City::DEFAULT_NAME{"UNKNOWN"};
@@ -47,7 +52,7 @@ City()
 
 
 void City::
-load_from_xml(std::string const& xml)
+load_from_xml(TypeCache& type_cache, std::string const& xml)
 {
   tinyxml2::XMLDocument doc;
   tinyxml2::XMLError err = doc.Parse(xml.c_str());
@@ -61,10 +66,12 @@ load_from_xml(std::string const& xml)
   if ((e != nullptr) && (e->Name() == CITY_XML_ELEMENT))
   {
     const char* name = e->Attribute(CITY_XML_NAME_ATTRIBUTE.c_str());
-    if (name)
+    if (name == nullptr)
     {
-      this->name_ = name;
+      xmllog.log("city name sttribute required");
+      return;
     }
+    this->name_ = name;
 
     for (auto element = e->FirstChildElement(); element; element = element->NextSiblingElement())
     {
@@ -79,6 +86,55 @@ load_from_xml(std::string const& xml)
       }
       else if (tag == CITY_XML_DISTRICTS_ELEMENT)
       {
+        for (auto d = element->FirstChildElement(); d; d = d->NextSiblingElement())
+        {
+          std::string name = d->Name();
+          if (name != DISTRICT_XML_ELEMENT)
+          {
+            xmllog.log("unexpected element '" + name + "'");
+            continue;
+          }
+
+          const char* val = d->Attribute(DISTRICT_XML_IDNAME_ATTRIBUTE.c_str());
+          if (val == nullptr)
+          {
+            xmllog.log("district type idname attribute required");
+            continue;
+          }
+
+          std::string idname = val;
+          DistrictType const* district_type = type_cache.district_type_cache->get_by_idname(idname);
+          if (!district_type)
+          {
+            xmllog.log("district type " + idname + " not found");
+            continue;
+          }
+
+          std::string district_name = District::DEFAULT_NAME;
+          std::string district_description = District::DEFAULT_DESCRIPTION;
+          for (auto dd = d->FirstChildElement(); dd; dd = dd->NextSiblingElement())
+          {
+            std::string tag = dd->Name();
+            if (tag == "name")
+            {
+              char const* val = dd->GetText();
+              if (val)
+              {
+                district_name = val;
+              }
+            }
+            else if (tag == "description")
+            {
+              char const* val = dd->GetText();
+              if (val)
+              {
+                district_description = val;
+              }
+            }
+          }
+
+          districts_.emplace_back(district_type, district_name, district_description);
+        }
       }
     }
   }

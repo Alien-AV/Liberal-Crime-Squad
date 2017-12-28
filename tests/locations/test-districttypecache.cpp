@@ -49,7 +49,7 @@ SCENARIO("loading valid XML into a DistrictTypeCache")
                     "  <districttype>\n"
                     "  </districttype>\n"
                     "</districts>"};
-    dtc.load_from_xml_string(xml);
+    dtc.load_from_xml(xml);
     THEN("it will have size 1")
     {
       REQUIRE(dtc.size() == 1);
@@ -64,7 +64,7 @@ SCENARIO("loading valid XML into a DistrictTypeCache")
                     "  <districttype idname=\"UNIVERSITY\">\n"
                     "  </districttype>\n"
                     "</districts>"};
-    dtc.load_from_xml_string(xml);
+    dtc.load_from_xml(xml);
     THEN("it will have size 2")
     {
       REQUIRE(dtc.size() == 2);
@@ -86,7 +86,7 @@ SCENARIO("loading invalid XML into a DistrictTypeCache")
     REQUIRE(dtc.size() == 0);
     WHEN("an attempt is made to load invalid XML")
     {
-      dtc.load_from_xml_string("garbage");
+      dtc.load_from_xml("garbage");
       THEN("the cache remains unchanged.")
       {
         REQUIRE(dtc.size() == 0);

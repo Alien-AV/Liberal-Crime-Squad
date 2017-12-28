@@ -1,5 +1,5 @@
 /**
- * Interface for the City submodule.
+ * Interface for the TypeCache component.
  */
 /*
  * Copyright 2017 Stephen M. Webb  <stephen.webb@bregmasoft.ca>
@@ -21,55 +21,28 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
  */
-#ifndef LCS_LOCATIONS_CITY_H
-#define LCS_LOCATIONS_CITY_H
+#ifndef LCS_TYPECACHE_H
+#define LCS_TYPECACHE_H
 
-#include "locations/district.h"
-#include <string>
-#include <vector>
-
-
-class TypeCache;
+class DistrictTypeCache;
 
 
 /**
- * A playable sub-region within the World.
+ * The master Type cache.
+ *
+ * This is really a collection of type-specific caches.
+ *
+ * The contained type caches are held by pointer so they can forward declared
+ * without puling in all their defnitions.  The builds are already slow enough.
  */
-class City
+class TypeCache
 {
 public:
-  using Districts = std::vector<District>;
-  using DistrictIterator = Districts::const_iterator;
-
-  static const std::string DEFAULT_NAME;
-  static const std::string DEFAULT_DESCRIPTION;
+  TypeCache();
+  ~TypeCache();
 
 public:
-  City();
-
-  void
-  load_from_xml(TypeCache& type_cache, std::string const& xml);
-
-  std::string const&
-  name() const;
-
-  std::string const&
-  shortname() const;
-
-  std::string const&
-  description() const;
-
-  DistrictIterator
-  districts_begin() const;
-
-  DistrictIterator
-  districts_end() const;
-
-private:
-  std::string name_;
-  std::string shortname_;
-  std::string description_;
-  Districts   districts_;
+  DistrictTypeCache* district_type_cache;
 };
 
-#endif /* LCS_LOCATIONS_CITY_H */
+#endif /* LCS_TYPECACHE_H */

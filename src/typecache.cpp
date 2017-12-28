@@ -1,5 +1,5 @@
 /**
- * Interface for the DistrictTypeCache component.
+ * Implementation of the TypeCache component.
  */
 /*
  * Copyright 2017 Stephen M. Webb  <stephen.webb@bregmasoft.ca>
@@ -21,42 +21,19 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
  */
-#ifndef LCS_LOCATION_DISTRICTTYPECACHE_H
-#define LCS_LOCATION_DISTRICTTYPECACHE_H
+#include "typecache.h"
 
-#include "locations/districttype.h"
-#include <vector>
+#include "locations/districttypecache.h"
 
 
-/**
- * A collection of DistrictType objects.
- */
-class DistrictTypeCache
+TypeCache::
+TypeCache()
+: district_type_cache(new DistrictTypeCache)
+{ }
+
+
+TypeCache::
+~TypeCache()
 {
-public:
-  using size_type = std::size_t;
-
-public:
-  ~DistrictTypeCache();
-
-  /** Create a district type cache from a string containing XML. */
-  void
-  load_from_xml(std::string const& xml);
-
-  /** Get a district type by idname. */
-  DistrictType const*
-  get_by_idname(std::string const& idname) const;
-
-  /** Get the number of district type definitions in the cache. */
-  size_type
-  size() const
-  { return district_type_bag_.size(); }
-
-private:
-  using DistrictTypeBag = std::vector<DistrictType>;
-
-  DistrictTypeBag district_type_bag_;
-};
-
-#endif /* LCS_LOCATION_DISTRICTTYPECACHE_H */
-
+  delete district_type_cache;
+}
