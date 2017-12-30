@@ -37,6 +37,7 @@ public:
   using size_type = std::size_t;
 
 public:
+  DistrictTypeCache();
   ~DistrictTypeCache();
 
   /** Create a district type cache from a string containing XML. */

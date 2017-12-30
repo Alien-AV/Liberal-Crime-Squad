@@ -31,9 +31,9 @@ SCENARIO("default-constructed DistrictTypeCache")
   GIVEN("a default-constructed DistrictTypeCache")
   {
     DistrictTypeCache dtc;
-    THEN("it should have zero size")
+    THEN("it should have 5 default types loaded.")
     {
-      REQUIRE(dtc.size() == 0);
+      REQUIRE(dtc.size() == 5);
     }
   }
 }
@@ -41,7 +41,9 @@ SCENARIO("default-constructed DistrictTypeCache")
 SCENARIO("loading valid XML into a DistrictTypeCache")
 {
   DistrictTypeCache dtc;
-  REQUIRE(dtc.size() == 0);
+
+  // preconditions
+  REQUIRE(dtc.size() == 5);
 
   WHEN("an XML with just one DistrictType definition is loaded")
   {
@@ -50,30 +52,32 @@ SCENARIO("loading valid XML into a DistrictTypeCache")
                     "  </districttype>\n"
                     "</districts>"};
     dtc.load_from_xml(xml);
-    THEN("it will have size 1")
+    THEN("it will have size 6 (5 defaults plus 1 loaded).")
     {
-      REQUIRE(dtc.size() == 1);
+      REQUIRE(dtc.size() == 6);
     }
   }
 
   WHEN("an XML with two DistrictType definitions are loaded")
   {
+    std::string const test_district_idname{"RESIDENTIAL"};
+
     std::string xml{"<districts>\n"
-                    "  <districttype idname=\"DOWNTOWN\">\n"
+                    "  <districttype idname=\"" + test_district_idname + "\">\n"
                     "  </districttype>\n"
-                    "  <districttype idname=\"UNIVERSITY\">\n"
+                    "  <districttype idname=\"RED LIGHT\">\n"
                     "  </districttype>\n"
                     "</districts>"};
     dtc.load_from_xml(xml);
-    THEN("it will have size 2")
+    THEN("it will have size 7")
     {
-      REQUIRE(dtc.size() == 2);
+      REQUIRE(dtc.size() == 7);
     }
     AND_THEN("a load district type can be retrieved.")
     {
-      DistrictType const* ct = dtc.get_by_idname("DOWNTOWN");
+      DistrictType const* ct = dtc.get_by_idname(test_district_idname);
       REQUIRE(ct != nullptr);
-      REQUIRE(ct->idname() == "DOWNTOWN");
+      REQUIRE(ct->idname() ==  test_district_idname);
     }
   }
 }
@@ -83,13 +87,16 @@ SCENARIO("loading invalid XML into a DistrictTypeCache")
   GIVEN("An empty district type cache")
   {
     DistrictTypeCache dtc;
-    REQUIRE(dtc.size() == 0);
+
+    // preconditions
+    REQUIRE(dtc.size() == 5);
+
     WHEN("an attempt is made to load invalid XML")
     {
       dtc.load_from_xml("garbage");
       THEN("the cache remains unchanged.")
       {
-        REQUIRE(dtc.size() == 0);
+        REQUIRE(dtc.size() == 5);
       }
     }
   }

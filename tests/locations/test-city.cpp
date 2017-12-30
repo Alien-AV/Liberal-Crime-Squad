@@ -45,14 +45,6 @@ SCENARIO("default-constructed City")
 SCENARIO("City loaded from XML")
 {
   TypeCache test_typecache;
-  test_typecache.district_type_cache->load_from_xml("<districts>"
-                                                      "<districttype idname=\"DOWNTOWN\">"
-                                                        "<name>Downtown</name>"
-                                                      "</districttype>"
-                                                      "<districttype idname=\"UNIVERSITY\">"
-                                                        "<name>University</name>"
-                                                      "</districttype>"
-                                                    "</districts>");
 
   GIVEN("a default-constructed city")
   {

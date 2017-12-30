@@ -23,13 +23,43 @@
  */
 #include "locations/districttypecache.h"
 
+#include "log/log.h"
 #include "tinyxml2.h"
 
 
 namespace
 {
   const std::string DISTRICTTYPECACHE_XML_ELEMENT{"districts"};
+
+  void
+  init_hardcoded_districts(DistrictTypeCache* dtc)
+  {
+    dtc->load_from_xml("<" + DISTRICTTYPECACHE_XML_ELEMENT + ">"
+                        "<districttype idname=\"DOWNTOWN\">"
+                          "<name>Downtown</name>"
+                        "</districttype>"
+                        "<districttype idname=\"COMMERCIAL\">"
+                          "<name>Commercial</name>"
+                        "</districttype>"
+                        "<districttype idname=\"INDUSTRIAL\">"
+                          "<name>Industrial</name>"
+                        "</districttype>"
+                        "<districttype idname=\"OUTOFTOWN\">"
+                          "<name>Out of Town</name>"
+                        "</districttype>"
+                        "<districttype idname=\"UNIVERSITY\">"
+                          "<name>University</name>"
+                        "</districttype>"
+                       "</" + DISTRICTTYPECACHE_XML_ELEMENT + ">");
+  }
 } // anonymous namespace
+
+
+DistrictTypeCache::
+DistrictTypeCache()
+{
+  init_hardcoded_districts(this);
+}
 
 
 DistrictTypeCache::
@@ -44,6 +74,11 @@ load_from_xml(std::string const& xml)
   tinyxml2::XMLError err = doc.Parse(xml.c_str());
   if (err != tinyxml2::XML_SUCCESS)
   {
+    const char* err = doc.GetErrorStr1();
+    if (err)
+      xmllog.log(err);
+    else
+      xmllog.log("unknown error loading DistrictTypeCache from XML");
     return;
   }
 
