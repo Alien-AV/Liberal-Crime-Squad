@@ -94,7 +94,7 @@ const int lowestloadscoreversion=31203;
 #define ESC 27
 #define SPACEBAR 32
 
-class Log;
+#include "log/log.h"
 
 enum UnlockTypes
 {
@@ -885,28 +885,6 @@ enum ActiveSortingChoices
    Declarations for every function grouped by folder and file.
    Created by jonathansfox.
 */
-
-/*******************************************************************************
-*
-*                             Logging Stuff
-*                             Folder: "log"
-*
-*******************************************************************************/
-
-//TODO: Make NEWLINEMODE_LOGFILES_DEFAULT, NEWLINEMODE_GAMELOG, and OVERWRITE_GAMELOG set by the cfg.
-//Whether or not it should autonewline logfiles by defualt.
-#define NEWLINEMODE_LOGFILES_DEFAULT 1
-//Whether or not it should autonewline the gamelog.
-#define NEWLINEMODE_GAMELOG 2
-//Whether or not it should overwrite the gamelog every time the game starts.
-#define OVERWRITE_GAMELOG false
-
-//The filepath of the gamelog.
-//TODO: Make this be set via the cfg.
-#define GAMELOG_FILEPATH "gamelog.txt"
-
-#include "log/log.h"
-
 
 /*******************************************************************************
 *

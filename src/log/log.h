@@ -30,10 +30,24 @@
 #define LOG_H_INCLUDED
 
 #include <fstream>
-#include "includes.h"
+#include <string>
+
+
+//TODO: Make NEWLINEMODE_LOGFILES_DEFAULT, NEWLINEMODE_GAMELOG, and OVERWRITE_GAMELOG set by the cfg.
+//Whether or not it should autonewline logfiles by defualt.
+#define NEWLINEMODE_LOGFILES_DEFAULT 1
+//Whether or not it should autonewline the gamelog.
+#define NEWLINEMODE_GAMELOG 2
+//Whether or not it should overwrite the gamelog every time the game starts.
+#define OVERWRITE_GAMELOG false
+
+//The filepath of the gamelog.
+//TODO: Make this be set via the cfg.
+#define GAMELOG_FILEPATH "gamelog.txt"
+
 
 /* Not in log.cpp, we just need this declared inside this header */
-void LCSCloseFileCPP(std::fstream &file);
+void LCSCloseFileCPP(std::fstream& file);
 
 /*
 Here's an example of how to use gamelog:
@@ -92,11 +106,11 @@ private:
    //Makes sure that the programmer initialized the function prior to attempted usage.
    bool initialized;
 
-   string filename; //The name/relevant path of the file.
+   std::string filename; //The name/relevant path of the file.
    //The file itself.
    //fstream for easier use in case I (or somebody else) wants to add a "read log" feature.
    //I would like that; so that one could check events and the like ingame.
-   fstream file;
+   std::fstream file;
 
    //Controls the automatic addition of newlines.
    //0 = no newlines.
@@ -108,7 +122,7 @@ private:
    int newline_mode;
 
    //What has been recorded so far (used in begl(), endl(), and record()).
-   string buffer;
+   std::string buffer;
 
    //This is used to work around all those empty lines output into the log at the
    //end of an encounter's round.
@@ -134,7 +148,7 @@ public:
           - 1 = newline
           - 2 = double newline
    */
-   bool initialize(const string& _filename, bool overwrite_existing, int _newline_mode = NEWLINEMODE_LOGFILES_DEFAULT);
+   bool initialize(const std::string& _filename, bool overwrite_existing, int _newline_mode = NEWLINEMODE_LOGFILES_DEFAULT);
 
    /*
       The following three functions, begl(), endl(), and record(), are specifically
@@ -174,7 +188,7 @@ public:
 
    Use this function if you want to log something that should not also be displayed ingame.
    */
-   bool log(const string& text);
+   bool log(const std::string& text);
 
    //Sets the newline mode.
    //Values work the same as with the initialize function for the newline_mode
@@ -187,5 +201,10 @@ public:
    // read-only access to private member variable logged_since_last_message
    bool hasMessage() { return logged_since_last_message; }
 };
+
+
+// Concrete logger objects.
+extern Log gamelog;
+extern Log xmllog;
 
 #endif //LOG_H_INCLUDED
