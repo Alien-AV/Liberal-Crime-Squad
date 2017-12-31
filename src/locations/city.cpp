@@ -52,7 +52,7 @@ City()
 
 
 void City::
-load_from_xml(TypeCache& type_cache, std::string const& xml)
+load_from_xml(TypeCache const& type_cache, std::string const& xml)
 {
   tinyxml2::XMLDocument doc;
   tinyxml2::XMLError err = doc.Parse(xml.c_str());
@@ -68,7 +68,7 @@ load_from_xml(TypeCache& type_cache, std::string const& xml)
     const char* name = e->Attribute(CITY_XML_NAME_ATTRIBUTE.c_str());
     if (name == nullptr)
     {
-      xmllog.log("city name sttribute required");
+      xmllog.log("city name attribute required");
       return;
     }
     this->name_ = name;

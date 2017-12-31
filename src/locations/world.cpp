@@ -23,7 +23,11 @@
  */
 #include "locations/world.h"
 
+#include <algorithm>
 #include "externs.h"
+#include <iostream> // temporary for warning message  @TODO remove me
+#include "log/log.h"
+#include "tinyxml2.h"
 
 
 #define City(X)                  location.push_back(city = new Location(X)); \
@@ -44,6 +48,35 @@
 #define SiteProperty(X, Y)       site->X = Y;
 #define SiteName(Y)              strcpy(site->name, Y);
 #define SiteShortname(Y)         strcpy(site->shortname, Y);
+
+
+namespace
+{
+  std::string const WORLD_XML_ELEMENT{"world"};
+  std::string const WORLD_XML_CITY_ELEMENT{"city"};
+  std::string const WORLD_XML_CURRENT_CITY_ELEMENT{"current_city"};
+  std::string const CITY_XML_NAME_ATTRIBUTE{"name"};
+
+  std::string const default_city_xml{"<world>"
+                                       "<city name=\"DEFAULT\">"
+                                         "<description>Default City</description>"
+                                         "<districts>"
+                                           "<district idname=\"DOWNTOWN\">"
+                                           "</district>"
+                                           "<district idname=\"COMMERCIAL\">"
+                                           "</district>"
+                                           "<district idname=\"UNIVERSITY\">"
+                                           "</district>"
+                                           "<district idname=\"INDUSTRIAL\">"
+                                           "</district>"
+                                           "<district idname=\"OUTOFTOWN\">"
+                                           "</district>"
+                                         "</districts>"
+                                       "</city>"
+                                       "<current_city>DEFAULT</current_city>"
+                                     "</world>"};
+} // anonymous namespace
+
 
 Location* find_site_by_id(int id)
 {
@@ -417,3 +450,114 @@ void make_world(bool hasmaps)
    //City(SITE_CITY_ATLANTA);
    //City(SITE_CITY_MIAMI);
 }
+
+
+World::
+World(TypeCache const& type_cache)
+{
+  if (!multipleCityMode)
+  {
+    this->load_from_xml(type_cache, default_city_xml);
+  }
+  else
+  {
+    std::cerr << "WARNING multi-city mode is not yet supported.\n";
+  }
+}
+
+
+void World::
+load_from_xml(TypeCache const& type_cache, std::string const& xml)
+{
+  std::string current_city_name;
+
+  tinyxml2::XMLDocument doc;
+  tinyxml2::XMLError err = doc.Parse(xml.c_str());
+  if (err != tinyxml2::XML_SUCCESS)
+  {
+    const char* err = doc.GetErrorStr1();
+    if (err)
+    {
+      xmllog.log(err);
+    }
+    else
+    {
+      xmllog.log("unknown error loading World from XML");
+    }
+    return;
+  }
+
+  auto e = doc.FirstChildElement();
+  if ((e != nullptr) && (e->Name() == WORLD_XML_ELEMENT))
+  {
+    for (auto element = e->FirstChildElement(); element; element = element->NextSiblingElement())
+    {
+      std::string const tag{element->Name()};
+      if (tag == WORLD_XML_CITY_ELEMENT)
+      {
+        const char* city_name = element->Attribute(CITY_XML_NAME_ATTRIBUTE.c_str());
+        if (city_name == nullptr)
+        {
+          xmllog.log("city name attribute required");
+          continue;
+        }
+
+        tinyxml2::XMLPrinter printer;
+        element->Accept(&printer);
+
+        City* city = this->find_city_by_name(city_name);
+        if (city)
+        {
+          city->load_from_xml(type_cache, printer.CStr());
+        }
+        else
+        {
+          this->city_.emplace_back();
+          this->city_.back().load_from_xml(type_cache, printer.CStr());
+        }
+      }
+      else if (tag == WORLD_XML_CURRENT_CITY_ELEMENT)
+      {
+        char const* val = element->GetText();
+        if (val)
+        {
+          current_city_name = val;
+        }
+      }
+    }
+  }
+
+  if (current_city_name.length() > 0)
+  {
+    this->current_city_ = this->find_city_by_name(current_city_name);
+  }
+}
+
+
+World::CityIterator World::
+cities_begin() const
+{ return this->city_.begin(); }
+
+
+World::CityIterator World::
+cities_end() const
+{ return this->city_.end(); }
+
+
+City* World::
+find_city_by_name(std::string const& name)
+{
+  auto it = std::find_if(this->city_.begin(), this->city_.end(), [name](City const& city)
+            {
+              return city.name() == name;
+            });
+  if (it != cities_end())
+    return &(*it);
+  return nullptr;
+}
+
+
+City* World::
+current_city() const
+{ return this->current_city_; }
+

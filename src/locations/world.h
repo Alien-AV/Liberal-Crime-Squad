@@ -24,6 +24,8 @@
 #ifndef LCS_LOCATIONS_WORLD_H
 #define LCS_LOCATIONS_WORLD_H
 
+#include "locations/city.h"
+
 class Creature;
 class Location;
 
@@ -77,6 +79,42 @@ find_hospital(Creature const& cr);
 /* sets up the list of locations */
 void
 make_world(bool hasmaps);
+
+
+class TypeCache;
+
+/**
+ * A representation of the entire "world" (as in "world series"... America, what
+ * a country).
+ */
+class World
+{
+public:
+  using Cities = std::vector<City>;
+  using CityIterator = Cities::const_iterator;
+
+public:
+  World(TypeCache const& type_cache);
+
+  void
+  load_from_xml(TypeCache const& type_cache, std::string const& xml);
+
+  CityIterator
+  cities_begin() const;
+
+  CityIterator
+  cities_end() const;
+
+  City*
+  find_city_by_name(std::string const& name);
+
+  City*
+  current_city() const;
+
+private:
+  Cities city_;
+  City*  current_city_{nullptr};
+};
 
 #endif /* LCS_LOCATIONS_WORLD_H */
 

@@ -48,7 +48,7 @@ public:
   City();
 
   void
-  load_from_xml(TypeCache& type_cache, std::string const& xml);
+  load_from_xml(TypeCache const& type_cache, std::string const& xml);
 
   std::string const&
   name() const;
