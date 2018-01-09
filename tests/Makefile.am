@@ -2,7 +2,7 @@
 # @file tests/Makefile.am
 # @brief automake recipe for LCS unit tests
 #
-# Copyright 2017 Stephen M. Webb  <stephen.webb@bregmasoft.ca>
+# Copyright 2017,2018 Stephen M. Webb  <stephen.webb@bregmasoft.ca>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -32,6 +32,8 @@ test_lcs_SOURCES = \
   locations/test-district.cpp \
   locations/test-districttype.cpp \
   locations/test-districttypecache.cpp \
+  locations/test-locationtype.cpp \
+  locations/test-locationtypecache.cpp \
   locations/test-world.cpp \
   politics/test-alignment.cpp \
   vehicle/test-vehicletype.cpp
