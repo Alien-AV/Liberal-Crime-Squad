@@ -2,7 +2,7 @@
  * Unit tests for the locations DistrictType component.
  */
 /*
- * Copyright 2017 Stephen M. Webb  <stephen.webb@bregmasoft.ca>
+ * Copyright 2017,2018 Stephen M. Webb  <stephen.webb@bregmasoft.ca>
  *
  * This file is part of Liberal Crime Squad.
  *
@@ -24,6 +24,7 @@
 #include "catch/catch.hpp"
 #include "locations/districttype.h"
 #include <string>
+#include "typecache.h"
 
 
 SCENARIO("default-created DistrictType")
@@ -50,6 +51,7 @@ SCENARIO("default-created DistrictType")
 
 SCENARIO("DistrictType creation from XML")
 {
+  TypeCache tc;
   DistrictType dt;
   GIVEN("a minimal DistrictType XML snippet")
   {
@@ -59,7 +61,7 @@ SCENARIO("DistrictType creation from XML")
                          "</districttype>"};
     WHEN("it is used to customize a DistrictType")
     {
-      dt.load_from_xml(test_xml);
+      dt.load_from_xml(tc, test_xml);
       THEN("the minimum required data are set")
       {
         REQUIRE(dt.name() == test_name);
@@ -72,7 +74,7 @@ SCENARIO("DistrictType creation from XML")
     std::string test_xml{"<districttype><garbage></districttype>"};
     WHEN("it is used to customize a DistrictType")
     {
-      dt.load_from_xml(test_xml);
+      dt.load_from_xml(tc, test_xml);
       THEN("the DistrictType remains unchanged")
       {
         REQUIRE(dt.name() == DistrictType::DEFAULT_NAME);

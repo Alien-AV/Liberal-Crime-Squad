@@ -2,7 +2,7 @@
  * Implementation of the City submodule.
  */
 /*
- * Copyright 2017 Stephen M. Webb  <stephen.webb@bregmasoft.ca>
+ * Copyright 2017,2018 Stephen M. Webb  <stephen.webb@bregmasoft.ca>
  *
  * This file is part of Liberal Crime Squad.
  *
@@ -23,6 +23,7 @@
  */
 #include "locations/city.h"
 
+#include "locations/district.h"
 #include "externs.h"
 #include "locations/districttypecache.h"
 #include "tinyxml2.h"
@@ -49,6 +50,28 @@ City()
 , shortname_(this->name_)
 , description_(DEFAULT_DESCRIPTION)
 { }
+
+
+City::
+City(City&& rhs)
+{
+  this->swap(rhs);
+}
+
+
+City::
+~City()
+{ }
+
+
+void City::
+swap(City& rhs) noexcept
+{
+  std::swap(name_,        rhs.name_);
+  std::swap(shortname_,   rhs.shortname_);
+  std::swap(description_, rhs.description_);
+  std::swap(districts_,   rhs.districts_);
+}
 
 
 void City::
@@ -133,7 +156,7 @@ load_from_xml(TypeCache const& type_cache, std::string const& xml)
             }
           }
 
-          districts_.emplace_back(district_type, district_name, district_description);
+          districts_.push_back(DistrictPtr(new District(district_type, district_name, district_description)));
         }
       }
     }

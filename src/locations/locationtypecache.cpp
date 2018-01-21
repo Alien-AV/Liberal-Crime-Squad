@@ -2,7 +2,7 @@
  * Implementation of the LocationTypeCache component.
  */
 /*
- * Copyright 2017 Stephen M. Webb  <stephen.webb@bregmasoft.ca>
+ * Copyright 2017,2018 Stephen M. Webb  <stephen.webb@bregmasoft.ca>
  *
  * This file is part of Liberal Crime Squad.
  *
@@ -23,8 +23,11 @@
  */
 #include "locations/locationtypecache.h"
 
+#include <algorithm>
+#include "locations/locationtype.h"
 #include "log/log.h"
 #include "tinyxml2.h"
+#include "typecache.h"
 
 
 namespace
@@ -32,9 +35,10 @@ namespace
   const std::string LOCATIONTYPECACHE_XML_ELEMENT{"locations"};
 
   void
-  init_hardcoded_locations(LocationTypeCache* dtc)
+  init_hardcoded_locations(TypeCache& type_cache, LocationTypeCache* dtc)
   {
-    dtc->load_from_xml("<" + LOCATIONTYPECACHE_XML_ELEMENT + ">"
+    dtc->load_from_xml(type_cache,
+                       "<" + LOCATIONTYPECACHE_XML_ELEMENT + ">"
                         "<locationtype idname=\"RESIDENTIAL_APARTMENT\">"
                           "<name>Residential Apartment</name>"
                         "</locationtype>"
@@ -56,9 +60,9 @@ namespace
 
 
 LocationTypeCache::
-LocationTypeCache()
+LocationTypeCache(TypeCache& type_cache)
 {
-  init_hardcoded_locations(this);
+  init_hardcoded_locations(type_cache, this);
 }
 
 
@@ -67,8 +71,8 @@ LocationTypeCache::
 { }
 
 
-void LocationTypeCache::
-load_from_xml(std::string const& xml)
+LocationType const* LocationTypeCache::
+load_from_xml(TypeCache& type_cache, std::string const& xml)
 {
   tinyxml2::XMLDocument doc;
   tinyxml2::XMLError err = doc.Parse(xml.c_str());
@@ -79,36 +83,100 @@ load_from_xml(std::string const& xml)
       xmllog.log(err);
     else
       xmllog.log("unknown error loading LocationTypeCache from XML");
-    return;
+    return nullptr;
   }
 
   for (auto element = doc.FirstChildElement(); element; element = element->NextSiblingElement())
   {
-    if (element->Name() == LOCATIONTYPECACHE_XML_ELEMENT)
+    // Loading a single LocationType
+    if (element->Name() == LocationType::LOCATIONTYPE_XML_ELEMENT)
+    {
+      LocationType* lt = nullptr;
+      const char* val = element->Attribute(LocationType::LOCATIONTYPE_XML_IDNAME_ATTRIBUTE.c_str());
+      if (val)
+      {
+        auto it = std::find_if(std::begin(this->location_type_bag_), std::end(this->location_type_bag_),
+                              [&val](LocationType const& rhs){ return val == rhs.idname(); });
+        if (it != std::end(this->location_type_bag_))
+        {
+          lt = &*it;
+        }
+      }
+
+      // Otherwise, create a new location type in the cache and use it.
+      if (!lt)
+      {
+        this->location_type_bag_.push_back(LocationType());
+        lt = &this->location_type_bag_.back();
+      }
+
+      lt->load_from_xml(xml);
+      return lt;
+    }
+
+    // Loading a collection of LocationTypes
+    else if (element->Name() == LOCATIONTYPECACHE_XML_ELEMENT)
     {
       for (auto e = element->FirstChildElement(); e; e = e->NextSiblingElement())
       {
-        this->location_type_bag_.push_back(LocationType());
+        LocationType* lt = nullptr;
+
+        // If an idname is given for the location type and that idname is
+        // already in the cache, use it.
+        const char* val = e->Attribute(LocationType::LOCATIONTYPE_XML_IDNAME_ATTRIBUTE.c_str());
+        if (val)
+        {
+          auto it = std::find_if(std::begin(this->location_type_bag_), std::end(this->location_type_bag_),
+                                [&val](LocationType const& rhs){ return val == rhs.idname(); });
+          if (it != std::end(this->location_type_bag_))
+          {
+            lt = &*it;
+          }
+        }
+
+        // Otherwise, create a new location type in the cache and use it.
+        if (!lt)
+        {
+          this->location_type_bag_.push_back(LocationType());
+          lt = &this->location_type_bag_.back();
+        }
+
         tinyxml2::XMLPrinter printer;
-        e->Accept( &printer );
-        this->location_type_bag_.back().load_from_xml(printer.CStr());
+        e->Accept(&printer);
+        lt->load_from_xml(printer.CStr());
       }
     }
   }
+  return nullptr;
 }
 
 
 LocationType const* LocationTypeCache::
 get_by_idname(std::string const& idname) const
 {
-  for (auto const& d: location_type_bag_)
+  auto it = std::find_if(std::begin(this->location_type_bag_), std::end(this->location_type_bag_),
+                        [&idname](LocationType const& rhs){ return idname == rhs.idname(); });
+  if (it != std::end(this->location_type_bag_))
   {
-    if (d.idname() == idname)
-    {
-      return &d;
-    }
+    return &*it;
   }
   return nullptr;
 }
 
+
+LocationType const* LocationTypeCache::
+clone_by_idname(std::string const& idname)
+{
+  LocationType const* lt = nullptr;
+  auto it = std::find_if(std::begin(this->location_type_bag_), std::end(this->location_type_bag_),
+                        [&idname](LocationType const& rhs){ return idname == rhs.idname(); });
+  if (it != std::end(this->location_type_bag_))
+  {
+    lt = it->clone();
+    this->location_type_bag_.push_back(*lt); // ugh @TODO move to using unique_ptr instead of by-value
+    delete lt;
+    lt = &this->location_type_bag_.back();
+  }
+  return lt;
+}
 

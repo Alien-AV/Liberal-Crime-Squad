@@ -2,7 +2,7 @@
  * Implementation of the DistrictTypeCache component.
  */
 /*
- * Copyright 2017 Stephen M. Webb  <stephen.webb@bregmasoft.ca>
+ * Copyright 2017,2018 Stephen M. Webb  <stephen.webb@bregmasoft.ca>
  *
  * This file is part of Liberal Crime Squad.
  *
@@ -25,6 +25,7 @@
 
 #include "log/log.h"
 #include "tinyxml2.h"
+#include "typecache.h"
 
 
 namespace
@@ -32,9 +33,10 @@ namespace
   const std::string DISTRICTTYPECACHE_XML_ELEMENT{"districts"};
 
   void
-  init_hardcoded_districts(DistrictTypeCache* dtc)
+  init_hardcoded_districts(TypeCache& type_cache, DistrictTypeCache* dtc)
   {
-    dtc->load_from_xml("<" + DISTRICTTYPECACHE_XML_ELEMENT + ">"
+    dtc->load_from_xml(type_cache,
+                       "<" + DISTRICTTYPECACHE_XML_ELEMENT + ">"
                         "<districttype idname=\"DOWNTOWN\">"
                           "<name>Downtown</name>"
                         "</districttype>"
@@ -56,9 +58,9 @@ namespace
 
 
 DistrictTypeCache::
-DistrictTypeCache()
+DistrictTypeCache(TypeCache& type_cache)
 {
-  init_hardcoded_districts(this);
+  init_hardcoded_districts(type_cache, this);
 }
 
 
@@ -68,7 +70,7 @@ DistrictTypeCache::
 
 
 void DistrictTypeCache::
-load_from_xml(std::string const& xml)
+load_from_xml(TypeCache& type_cache, std::string const& xml)
 {
   tinyxml2::XMLDocument doc;
   tinyxml2::XMLError err = doc.Parse(xml.c_str());
@@ -91,7 +93,7 @@ load_from_xml(std::string const& xml)
         this->district_type_bag_.push_back(DistrictType());
         tinyxml2::XMLPrinter printer;
         e->Accept( &printer );
-        this->district_type_bag_.back().load_from_xml(printer.CStr());
+        this->district_type_bag_.back().load_from_xml(type_cache, printer.CStr());
       }
     }
   }

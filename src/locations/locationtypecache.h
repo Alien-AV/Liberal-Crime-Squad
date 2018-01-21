@@ -2,7 +2,7 @@
  * Interface for the LocationTypeCache component.
  */
 /*
- * Copyright 2017 Stephen M. Webb  <stephen.webb@bregmasoft.ca>
+ * Copyright 2017,2018 Stephen M. Webb  <stephen.webb@bregmasoft.ca>
  *
  * This file is part of Liberal Crime Squad.
  *
@@ -28,6 +28,9 @@
 #include <vector>
 
 
+class TypeCache;
+
+
 /**
  * A collection of LocationType objects.
  */
@@ -37,16 +40,19 @@ public:
   using size_type = std::size_t;
 
 public:
-  LocationTypeCache();
+  LocationTypeCache(TypeCache& type_cache);
   ~LocationTypeCache();
 
   /** Create a location type cache from a string containing XML. */
-  void
-  load_from_xml(std::string const& xml);
+  LocationType const*
+  load_from_xml(TypeCache& type_cache, std::string const& xml);
 
   /** Get a location type by idname. */
   LocationType const*
   get_by_idname(std::string const& idname) const;
+
+  LocationType const*
+  clone_by_idname(std::string const& idname);
 
   /** Get the number of location type definitions in the cache. */
   size_type

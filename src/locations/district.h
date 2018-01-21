@@ -2,7 +2,7 @@
  * Interface for the District submodule.
  */
 /*
- * Copyright 2017 Stephen M. Webb  <stephen.webb@bregmasoft.ca>
+ * Copyright 2017,2018 Stephen M. Webb  <stephen.webb@bregmasoft.ca>
  *
  * This file is part of Liberal Crime Squad.
  *
@@ -24,10 +24,13 @@
 #ifndef LCS_LOCATIONS_DISTRICT_H
 #define LCS_LOCATIONS_DISTRICT_H
 
+#include <memory>
 #include <string>
+#include <vector>
 
 
 class DistrictType;
+class Location;
 
 /**
  * A sub-region within a City.
@@ -45,6 +48,13 @@ public:
            std::string const&  name = DEFAULT_NAME,
            std::string const&  description = DEFAULT_DESCRIPTION);
 
+  District(const District&) = delete;
+
+  District&
+  operator=(const District&) = delete;
+
+  ~District();
+
   std::string const&
   name() const;
 
@@ -55,9 +65,13 @@ public:
   type() const;
 
 private:
+  using LocationPtr = std::unique_ptr<Location>;
+  using LocationBag = std::vector<LocationPtr>;
+
   DistrictType const* type_;
   std::string         name_;
   std::string         description_;
+  LocationBag         locations_;
 };
 
 #endif /* LCS_LOCATIONS_DISTRICT_H */

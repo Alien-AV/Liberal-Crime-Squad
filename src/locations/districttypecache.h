@@ -2,7 +2,7 @@
  * Interface for the DistrictTypeCache component.
  */
 /*
- * Copyright 2017 Stephen M. Webb  <stephen.webb@bregmasoft.ca>
+ * Copyright 2017,2018 Stephen M. Webb  <stephen.webb@bregmasoft.ca>
  *
  * This file is part of Liberal Crime Squad.
  *
@@ -28,6 +28,9 @@
 #include <vector>
 
 
+class TypeCache;
+
+
 /**
  * A collection of DistrictType objects.
  */
@@ -37,12 +40,12 @@ public:
   using size_type = std::size_t;
 
 public:
-  DistrictTypeCache();
+  DistrictTypeCache(TypeCache& type_cache);
   ~DistrictTypeCache();
 
   /** Create a district type cache from a string containing XML. */
   void
-  load_from_xml(std::string const& xml);
+  load_from_xml(TypeCache& type_cache, std::string const& xml);
 
   /** Get a district type by idname. */
   DistrictType const*

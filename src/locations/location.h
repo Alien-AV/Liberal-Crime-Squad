@@ -1,8 +1,8 @@
 /**
- * Interface for the TypeCache component.
+ * Interface for the Location submodule.
  */
 /*
- * Copyright 2017,2018 Stephen M. Webb  <stephen.webb@bregmasoft.ca>
+ * Copyright 2018 Stephen M. Webb  <stephen.webb@bregmasoft.ca>
  *
  * This file is part of Liberal Crime Squad.
  *
@@ -21,30 +21,45 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
  */
-#ifndef LCS_TYPECACHE_H
-#define LCS_TYPECACHE_H
+#ifndef LCS_LOCATIONS_LOCATION_H
+#define LCS_LOCATIONS_LOCATION_H
 
-class DistrictTypeCache;
-class LocationTypeCache;
+#include <string>
 
+
+class LocationType;
 
 /**
- * The master Type cache.
+ * A sub-region within a City.
  *
- * This is really a collection of type-specific caches.
- *
- * The contained type caches are held by pointer so they can forward declared
- * without puling in all their defnitions.  The builds are already slow enough.
+ * Think of this as a neighbourhood.
  */
-class TypeCache
+class Location
 {
 public:
-  TypeCache();
-  ~TypeCache();
+  static const std::string DEFAULT_NAME;
+  static const std::string DEFAULT_DESCRIPTION;
 
 public:
-  DistrictTypeCache* district_type_cache;
-  LocationTypeCache* location_type_cache;
+  Location(LocationType const* type,
+           std::string const&  name = DEFAULT_NAME,
+           std::string const&  description = DEFAULT_DESCRIPTION);
+
+  ~Location() = default;
+
+  std::string const&
+  name() const;
+
+  std::string const&
+  description() const;
+
+  LocationType const*
+  type() const;
+
+private:
+  LocationType const* type_;
+  std::string         name_;
+  std::string         description_;
 };
 
-#endif /* LCS_TYPECACHE_H */
+#endif /* LCS_LOCATIONS_LOCATION_H */

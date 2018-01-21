@@ -2,7 +2,7 @@
  * Unit tests for the locations City component.
  */
 /*
- * Copyright 2017 Stephen M. Webb  <stephen.webb@bregmasoft.ca>
+ * Copyright 2017,2018 Stephen M. Webb  <stephen.webb@bregmasoft.ca>
  *
  * This file is part of Liberal Crime Squad.
  *
@@ -23,6 +23,7 @@
  */
 #include "catch/catch.hpp"
 #include "locations/city.h"
+#include "locations/district.h"
 #include "locations/districttypecache.h"
 #include "typecache.h"
 
@@ -75,7 +76,7 @@ SCENARIO("City loaded from XML")
 
         auto d = city.districts_begin();
         ++d;
-        REQUIRE(d->name() == "State College");
+        REQUIRE((*d)->name() == "State College");
       }
     }
   }

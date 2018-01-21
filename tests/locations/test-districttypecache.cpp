@@ -2,7 +2,7 @@
  * Unit tests for the DistrictTypeCache component.
  */
 /*
- * Copyright 2017 Stephen M. Webb  <stephen.webb@bregmasoft.ca>
+ * Copyright 2017,2018 Stephen M. Webb  <stephen.webb@bregmasoft.ca>
  *
  * This file is part of Liberal Crime Squad.
  *
@@ -24,13 +24,15 @@
 #include "catch/catch.hpp"
 #include "locations/districttypecache.h"
 #include <string>
+#include "typecache.h"
 
 
 SCENARIO("default-constructed DistrictTypeCache")
 {
+  TypeCache tc;
   GIVEN("a default-constructed DistrictTypeCache")
   {
-    DistrictTypeCache dtc;
+    DistrictTypeCache dtc(tc);
     THEN("it should have 5 default types loaded.")
     {
       REQUIRE(dtc.size() == 5);
@@ -40,7 +42,8 @@ SCENARIO("default-constructed DistrictTypeCache")
 
 SCENARIO("loading valid XML into a DistrictTypeCache")
 {
-  DistrictTypeCache dtc;
+  TypeCache tc;
+  DistrictTypeCache dtc(tc);
 
   // preconditions
   REQUIRE(dtc.size() == 5);
@@ -51,7 +54,7 @@ SCENARIO("loading valid XML into a DistrictTypeCache")
                     "  <districttype>\n"
                     "  </districttype>\n"
                     "</districts>"};
-    dtc.load_from_xml(xml);
+    dtc.load_from_xml(tc, xml);
     THEN("it will have size 6 (5 defaults plus 1 loaded).")
     {
       REQUIRE(dtc.size() == 6);
@@ -68,7 +71,7 @@ SCENARIO("loading valid XML into a DistrictTypeCache")
                     "  <districttype idname=\"RED LIGHT\">\n"
                     "  </districttype>\n"
                     "</districts>"};
-    dtc.load_from_xml(xml);
+    dtc.load_from_xml(tc, xml);
     THEN("it will have size 7")
     {
       REQUIRE(dtc.size() == 7);
@@ -84,16 +87,17 @@ SCENARIO("loading valid XML into a DistrictTypeCache")
 
 SCENARIO("loading invalid XML into a DistrictTypeCache")
 {
+  TypeCache tc;
   GIVEN("An empty district type cache")
   {
-    DistrictTypeCache dtc;
+    DistrictTypeCache dtc(tc);
 
     // preconditions
     REQUIRE(dtc.size() == 5);
 
     WHEN("an attempt is made to load invalid XML")
     {
-      dtc.load_from_xml("garbage");
+      dtc.load_from_xml(tc, "garbage");
       THEN("the cache remains unchanged.")
       {
         REQUIRE(dtc.size() == 5);

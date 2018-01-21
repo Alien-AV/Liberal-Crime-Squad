@@ -2,7 +2,7 @@
  * Implementation of the TypeCache component.
  */
 /*
- * Copyright 2017 Stephen M. Webb  <stephen.webb@bregmasoft.ca>
+ * Copyright 2017,2018 Stephen M. Webb  <stephen.webb@bregmasoft.ca>
  *
  * This file is part of Liberal Crime Squad.
  *
@@ -24,16 +24,19 @@
 #include "typecache.h"
 
 #include "locations/districttypecache.h"
+#include "locations/locationtypecache.h"
 
 
 TypeCache::
 TypeCache()
-: district_type_cache(new DistrictTypeCache)
+: district_type_cache(new DistrictTypeCache(*this))
+, location_type_cache(new LocationTypeCache(*this))
 { }
 
 
 TypeCache::
 ~TypeCache()
 {
+  delete location_type_cache;
   delete district_type_cache;
 }

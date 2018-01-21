@@ -2,7 +2,7 @@
  * Implementation of the DistrictType component.
  */
 /*
- * Copyright 2017 Stephen M. Webb  <stephen.webb@bregmasoft.ca>
+ * Copyright 2017,2018 Stephen M. Webb  <stephen.webb@bregmasoft.ca>
  *
  * This file is part of Liberal Crime Squad.
  *
@@ -23,7 +23,11 @@
  */
 #include "locations/districttype.h"
 
+#include "locations/locationtype.h"
+#include "locations/locationtypecache.h"
+#include "log/log.h"
 #include "tinyxml2.h"
+#include "typecache.h"
 
 
 namespace
@@ -65,15 +69,20 @@ description() const
 
 
 void DistrictType::
-load_from_xml(std::string const& xml)
+load_from_xml(TypeCache& type_cache, std::string const& xml)
 {
   tinyxml2::XMLDocument doc;
   tinyxml2::XMLError err = doc.Parse(xml.c_str());
   if (err != tinyxml2::XML_SUCCESS)
   {
-    doc.PrintError();
+    const char* err = doc.GetErrorStr1();
+    if (err)
+      xmllog.log(err);
+    else
+      xmllog.log("unknown error loading DistrictType from XML");
     return;
   }
+
 
   auto e = doc.FirstChildElement();
   if ((e != nullptr) && (e->Name() == DISTRICTTYPE_XML_ELEMENT))
@@ -102,6 +111,43 @@ load_from_xml(std::string const& xml)
         {
           this->description_ = val;
         }
+      }
+      else if (tag == LocationType::LOCATIONTYPE_XML_ELEMENT)
+      {
+        LocationType const* lt = nullptr;
+        const char* val = element->Attribute(LocationType::LOCATIONTYPE_XML_IDNAME_ATTRIBUTE.c_str());
+        if (val)
+        {
+          lt = type_cache.location_type_cache->get_by_idname(val);
+        }
+
+        // No idname or idname not found in cache.
+        if (lt == nullptr)
+        {
+          tinyxml2::XMLPrinter printer;
+          e->Accept(&printer);
+          lt = type_cache.location_type_cache->load_from_xml(type_cache, printer.CStr()); 
+        }
+
+        // Error loading LocationType.
+        if (lt == nullptr)
+        {
+          xmllog.log("error loading LocationType from DistrictType");
+          continue;
+        }
+
+        // Duplicates call for cloning.
+        for (auto const& p: this->location_types_)
+        {
+          if (p->idname() == lt->idname())
+          {
+            lt = type_cache.location_type_cache->clone_by_idname(lt->idname());
+            break;
+          }
+        }
+
+        // Finally, add it to our list.
+        this->location_types_.push_back(lt);
       }
     }
   }

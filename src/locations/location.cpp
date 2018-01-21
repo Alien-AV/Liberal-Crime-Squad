@@ -1,8 +1,8 @@
 /**
- * Interface for the TypeCache component.
+ * Implementation of the Location component.
  */
 /*
- * Copyright 2017,2018 Stephen M. Webb  <stephen.webb@bregmasoft.ca>
+ * Copyright 2018 Stephen M. Webb  <stephen.webb@bregmasoft.ca>
  *
  * This file is part of Liberal Crime Squad.
  *
@@ -21,30 +21,31 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
  */
-#ifndef LCS_TYPECACHE_H
-#define LCS_TYPECACHE_H
-
-class DistrictTypeCache;
-class LocationTypeCache;
+#include "locations/location.h"
 
 
-/**
- * The master Type cache.
- *
- * This is really a collection of type-specific caches.
- *
- * The contained type caches are held by pointer so they can forward declared
- * without puling in all their defnitions.  The builds are already slow enough.
- */
-class TypeCache
-{
-public:
-  TypeCache();
-  ~TypeCache();
+const std::string Location::DEFAULT_NAME{"Nowhere"};
+const std::string Location::DEFAULT_DESCRIPTION{"no description"};
 
-public:
-  DistrictTypeCache* district_type_cache;
-  LocationTypeCache* location_type_cache;
-};
 
-#endif /* LCS_TYPECACHE_H */
+Location::
+Location(LocationType const* type,
+         std::string const&  name,
+         std::string const&  description)
+{ }
+
+
+std::string const& Location::
+name() const
+{ return this->name_; }
+
+
+std::string const& Location::
+description() const
+{ return this->description_; }
+
+
+LocationType const* Location::
+type() const
+{ return this->type_; }
+

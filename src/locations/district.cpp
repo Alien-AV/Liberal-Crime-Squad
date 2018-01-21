@@ -2,7 +2,7 @@
  * Implementation of the District submodule.
  */
 /*
- * Copyright 2017 Stephen M. Webb  <stephen.webb@bregmasoft.ca>
+ * Copyright 2017,2018 Stephen M. Webb  <stephen.webb@bregmasoft.ca>
  *
  * This file is part of Liberal Crime Squad.
  *
@@ -24,6 +24,7 @@
 #include "locations/district.h"
 
 #include "locations/districttype.h"
+#include "locations/location.h"
 
 
 const std::string District::DEFAULT_NAME;
@@ -47,6 +48,11 @@ District(DistrictType const* type,
     this->description_ = type->description();
   }
 }
+
+
+District::
+~District()
+{ }
 
 
 std::string const&

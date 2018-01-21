@@ -2,7 +2,7 @@
  * Interface for the DistrictType component.
  */
 /*
- * Copyright 2017 Stephen M. Webb  <stephen.webb@bregmasoft.ca>
+ * Copyright 2017,2018 Stephen M. Webb  <stephen.webb@bregmasoft.ca>
  *
  * This file is part of Liberal Crime Squad.
  *
@@ -26,6 +26,11 @@
 
 
 #include <string>
+#include <vector>
+
+
+class LocationType;
+class TypeCache;
 
 
 class DistrictType
@@ -34,7 +39,7 @@ public:
   DistrictType();
 
   void
-  load_from_xml(std::string const& xml);
+  load_from_xml(TypeCache& type_cache, std::string const& xml);
 
   std::string const&
   idname() const;
@@ -50,9 +55,12 @@ public:
   static const std::string DEFAULT_DESCRIPTION;
 
 private:
-  std::string idname_;
-  std::string name_;
-  std::string description_;
+  using LocationTypeBag = std::vector<LocationType const*>;
+
+  std::string     idname_;
+  std::string     name_;
+  std::string     description_;
+  LocationTypeBag location_types_;
 };
 
 #endif /* LCS_LOCATIONS_DISTRICTTYPE_H */

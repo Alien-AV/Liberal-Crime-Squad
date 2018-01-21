@@ -2,7 +2,7 @@
  * Interface for the City submodule.
  */
 /*
- * Copyright 2017 Stephen M. Webb  <stephen.webb@bregmasoft.ca>
+ * Copyright 2017,2018 Stephen M. Webb  <stephen.webb@bregmasoft.ca>
  *
  * This file is part of Liberal Crime Squad.
  *
@@ -24,11 +24,12 @@
 #ifndef LCS_LOCATIONS_CITY_H
 #define LCS_LOCATIONS_CITY_H
 
-#include "locations/district.h"
+#include <memory>
 #include <string>
 #include <vector>
 
 
+class District;
 class TypeCache;
 
 
@@ -38,7 +39,8 @@ class TypeCache;
 class City
 {
 public:
-  using Districts = std::vector<District>;
+  using DistrictPtr = std::unique_ptr<District>;
+  using Districts = std::vector<DistrictPtr>;
   using DistrictIterator = Districts::const_iterator;
 
   static const std::string DEFAULT_NAME;
@@ -46,6 +48,15 @@ public:
 
 public:
   City();
+
+  City(const City&) = delete;
+
+  City(City&&);
+
+  City&
+  operator=(const City&) = delete;
+
+  ~City();
 
   void
   load_from_xml(TypeCache const& type_cache, std::string const& xml);
@@ -64,6 +75,10 @@ public:
 
   DistrictIterator
   districts_end() const;
+
+private:
+  void
+  swap(City& rhs) noexcept;
 
 private:
   std::string name_;

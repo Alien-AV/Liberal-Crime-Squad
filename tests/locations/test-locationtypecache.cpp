@@ -24,13 +24,15 @@
 #include "catch/catch.hpp"
 #include "locations/locationtypecache.h"
 #include <string>
+#include "typecache.h"
 
 
 SCENARIO("default-constructed LocationTypeCache")
 {
+  TypeCache tc;
   GIVEN("a default-constructed LocationTypeCache")
   {
-    LocationTypeCache ltc;
+    LocationTypeCache ltc(tc);
     THEN("it should have 5 default types loaded.")
     {
       REQUIRE(ltc.size() == 5);
@@ -40,7 +42,8 @@ SCENARIO("default-constructed LocationTypeCache")
 
 SCENARIO("loading valid XML into a LocationTypeCache")
 {
-  LocationTypeCache ltc;
+  TypeCache tc;
+  LocationTypeCache ltc(tc);
 
   // preconditions
   REQUIRE(ltc.size() == 5);
@@ -51,7 +54,7 @@ SCENARIO("loading valid XML into a LocationTypeCache")
                     "  <locationtype>\n"
                     "  </locationtype>\n"
                     "</locations>"};
-    ltc.load_from_xml(xml);
+    ltc.load_from_xml(tc, xml);
     THEN("it will have size 6 (5 defaults plus 1 loaded).")
     {
       REQUIRE(ltc.size() == 6);
@@ -68,7 +71,7 @@ SCENARIO("loading valid XML into a LocationTypeCache")
                     "  <locationtype idname=\"RED LIGHT\">\n"
                     "  </locationtype>\n"
                     "</locations>"};
-    ltc.load_from_xml(xml);
+    ltc.load_from_xml(tc, xml);
     THEN("it will have size 7")
     {
       REQUIRE(ltc.size() == 7);
@@ -84,19 +87,43 @@ SCENARIO("loading valid XML into a LocationTypeCache")
 
 SCENARIO("loading invalid XML into a LocationTypeCache")
 {
+  TypeCache tc;
   GIVEN("An empty location type cache")
   {
-    LocationTypeCache ltc;
+    LocationTypeCache ltc(tc);
 
     // preconditions
     REQUIRE(ltc.size() == 5);
 
     WHEN("an attempt is made to load invalid XML")
     {
-      ltc.load_from_xml("garbage");
+      ltc.load_from_xml(tc, "garbage");
       THEN("the cache remains unchanged.")
       {
         REQUIRE(ltc.size() == 5);
+      }
+    }
+  }
+}
+
+SCENARIO("clone an existing LocationType")
+{
+  TypeCache tc;
+  GIVEN("A default-constructed location type cache")
+  {
+    LocationTypeCache ltc(tc);
+    std::size_t original_size = ltc.size();
+    REQUIRE(original_size > 0);
+    LocationType const* existing_lt = ltc.get_by_idname("BUSINESS_JUICEBAR");
+    REQUIRE(existing_lt != nullptr);
+
+    WHEN("an existing cached LocationType is cloned")
+    {
+      LocationType const* new_lt = ltc.clone_by_idname(existing_lt->idname());
+      THEN("the cache has grown and the new object has a different idname")
+      {
+        REQUIRE(ltc.size() > original_size);
+        REQUIRE(new_lt->idname() != existing_lt->idname());
       }
     }
   }

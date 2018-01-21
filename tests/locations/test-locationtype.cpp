@@ -80,3 +80,21 @@ SCENARIO("LocationType creation from XML")
     }
   }
 }
+
+SCENARIO("Clone existing location type")
+{
+  GIVEN("an existing valid location type")
+  {
+    LocationType lt0;
+    WHEN("it is cloned")
+    {
+      LocationType* lt1 = lt0.clone();
+      THEN("the clone is an exact copy except for the idname")
+      {
+        REQUIRE(lt0.idname() != lt1->idname());
+        REQUIRE(lt0.name() == lt1->name());
+        REQUIRE(lt0.description() == lt1->description());
+      }
+    }
+  }
+}

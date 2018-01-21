@@ -31,10 +31,17 @@
 class LocationType
 {
 public:
+  static const std::string LOCATIONTYPE_XML_ELEMENT;
+  static const std::string LOCATIONTYPE_XML_IDNAME_ATTRIBUTE;
+
+public:
   LocationType();
 
   void
   load_from_xml(std::string const& xml);
+
+  LocationType*
+  clone() const;
 
   std::string const&
   idname() const;

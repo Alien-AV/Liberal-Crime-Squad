@@ -29,8 +29,6 @@
 
 namespace
 {
-  const std::string LOCATIONTYPE_XML_ELEMENT{"locationtype"};
-  const std::string LOCATIONTYPE_XML_IDNAME_ATTRIBUTE{"idname"};
   const std::string LOCATIONTYPE_XML_NAME_ELEMENT{"name"};
   const std::string LOCATIONTYPE_XML_DESCRIPTION_ELEMENT{"description"};
 
@@ -40,6 +38,8 @@ namespace
 
 const std::string LocationType::DEFAULT_NAME{"A Location"};
 const std::string LocationType::DEFAULT_DESCRIPTION{"Unknown"};
+const std::string LocationType::LOCATIONTYPE_XML_ELEMENT{"locationtype"};
+const std::string LocationType::LOCATIONTYPE_XML_IDNAME_ATTRIBUTE{"idname"};
 
 
 LocationType::
@@ -95,6 +95,15 @@ load_from_xml(std::string const& xml)
       }
     }
   }
+}
+
+
+LocationType* LocationType::
+clone() const
+{
+  LocationType* the_clone = new LocationType;
+  the_clone->idname_ = this->idname_ + "/" + std::to_string(++location_type_id);
+  return the_clone;
 }
 
 
