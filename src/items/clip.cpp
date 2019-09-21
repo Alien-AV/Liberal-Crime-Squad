@@ -26,6 +26,11 @@
 #include "items/clip.h"
 #include <externs.h>
 
+namespace
+{
+    const std::string CLIP_XML_CLIP_ELEMENT{"clip"};
+} // anonymous namespace
+
 Clip::
 Clip(ClipType const& type, int number)
 : Item(type, number)
@@ -39,7 +44,7 @@ Clip(std::string const& inputXml)
 
 std::string Clip::
 item_class() const
-{ return "class"; }
+{ return CLIP_XML_CLIP_ELEMENT; }
 
 
 Clip* Clip::
