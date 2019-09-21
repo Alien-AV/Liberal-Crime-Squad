@@ -97,13 +97,13 @@ as_printable(Alignment alignment, bool capitalize = true);
  * there are too many dependencies between the underlying implementation of
  * Alignment and thingd that use it.
  */
-std::size_t
+int
 to_index(Alignment alignment);
 
 /**
  * Get a numeric difference in magnitude between two alignments.
  */
-std::size_t
+int
 diff(Alignment lhs, Alignment rhs);
 
 

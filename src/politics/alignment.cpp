@@ -161,7 +161,7 @@ as_printable(Alignment alignment, bool capitalize)
 }
 
 
-std::size_t
+int
 to_index(Alignment alignment)
 {
   switch (alignment)
@@ -177,7 +177,7 @@ to_index(Alignment alignment)
 }
 
 
-std::size_t
+int
 diff(Alignment lhs, Alignment rhs)
 {
   std::size_t lhsi = to_index(lhs);
