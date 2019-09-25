@@ -525,9 +525,7 @@ char load(const string& filename)
             fread (&vec[0], creatureLen, 1, h);
             vec[creatureLen] = '\0';
             pool[pl] = new Creature(&vec[0]);
-            //pool[pl]=new Creature;
-            //fread(pool[pl],sizeof(Creature),1,h);
-            //read extra interrogation data if applicable
+
             if (pool[pl]->align == Alignment::CONSERVATIVE && pool[pl]->alive)
             {
                interrogation* &intr = pool[pl]->activity.intr();
@@ -547,62 +545,6 @@ char load(const string& filename)
                   intr->rapport[id]=value;
                }
             }
-            /*
-            //read equipment
-            vector<Item*> dump; //Used to catch invalid pointers from creature so they aren't deleted.
-            pool[pl]->drop_weapon(&dump);
-            pool[pl]->strip(&dump);
-            pool[pl]->clips = deque<Clip*>();
-            pool[pl]->extra_throwing_weapons = deque<Weapon*>();
-            int itemLen;
-            fread(&itemLen, sizeof(int), 1, h);
-            if(itemLen != 0)
-            {
-               vector<char> vec = vector<char>(itemLen + 1);
-               fread(&vec[0], itemLen, 1, h);
-               vec[itemLen] = '\0';
-
-               Weapon w(&vec[0]);
-               if(getweapontype(w.get_itemtypename())!=-1) //Check it is a valid weapon type.
-                  pool[pl]->give_weapon(w,&dump);
-            }
-            //pool[pl]->clips.clear();
-            fread(&dummy,sizeof(int),1,h);
-            for(int nc=0; nc<dummy; nc++)
-            {
-               fread(&itemLen, sizeof(itemLen), 1, h);
-               vector<char> vec = vector<char>(itemLen + 1);
-               fread(&vec[0], itemLen, 1, h);
-               vec[itemLen] = '\0';
-
-               Clip c(&vec[0]);
-               if(getcliptype(c.get_itemtypename())!=-1) //Check it is a valid clip type.
-                  pool[pl]->take_clips(c,len(c));
-            }
-            //pool[pl]->extra_throwing_weapons.clear();
-            fread(&dummy,sizeof(int),1,h);
-            for(int ne=0; ne<dummy; ne++)
-            {
-               fread(&itemLen, sizeof(itemLen), 1, h);
-               vector<char> vec = vector<char>(itemLen + 1);
-               fread(&vec[0], itemLen, 1, h);
-               vec[itemLen] = '\0';
-
-               Weapon w(&vec[0]);
-               if(getweapontype(w.get_itemtypename())!=-1) //Check it is a valid weapon type.
-                  pool[pl]->give_weapon(w,NULL);
-            }
-            fread(&itemLen, sizeof(itemLen), 1, h);
-            if(itemLen != 0)
-            {
-               vector<char> vec = vector<char>(itemLen + 1);
-               fread(&vec[0], itemLen, 1, h);
-               vec[itemLen] = '\0';
-
-               Armor a(&vec[0]);
-               if(getarmortype(a.get_itemtypename())!=-1) //Check it is a valid armor type.
-                  pool[pl]->give_armor(a,&dump);
-            }*/
          }
 
          //Unique Creatures
@@ -613,7 +555,6 @@ char load(const string& filename)
             fread (&vec[0], uniquecreaturesLen, 1, h);
             vec[uniquecreaturesLen] = '\0';
             uniqueCreatures = UniqueCreatures(&vec[0]);
-            //fread(&uniqueCreatures,sizeof(UniqueCreatures),1,h);
          }
 
          //SQUADS

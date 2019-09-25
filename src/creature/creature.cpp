@@ -1302,7 +1302,8 @@ UniqueCreatures(const std::string& xml)
       if (tag == "CEO" || tag == "Pres")
       {
         tinyxml2::XMLPrinter printer;
-        element->Accept(&printer);
+        auto actual_creature_object = element->FirstChildElement();
+        actual_creature_object->Accept(&printer);
         if (tag == "CEO")
           CEO_ = Creature(printer.CStr());
         else
