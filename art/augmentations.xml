@@ -58,7 +58,7 @@
         <type>arms</type>
         <attribute>heart</attribute>
         <effect>2</effect>
-        <cost>20</cost>
+        <cost>50</cost>
         <description>By covering the arms of a Liberal with these tattoos, which are laced with a special compound, they will be even more ready to devote their lives to the liberal cause.</description>
     </augmenttype>
 
@@ -67,6 +67,7 @@
         <type>head</type>
         <attribute>charisma</attribute>
         <effect>3</effect>
+		<cost>5000</cost>
         <description>By augmenting a Liberal's language centers, we can give them increased language processing and awareness when dealing with other people.</description>
     </augmenttype>
 
@@ -85,6 +86,7 @@
         <type>head</type>
         <attribute>intelligence</attribute>
         <effect>2</effect>
+		<cost>6000</cost>
         <description>Our Liberal Scientists have developed a pill that, when taken twice a day (once in the morning and once in the evening with warm glass of Liberal Milk), increases brain power ten-fold.</description>
     </augmenttype>
 
@@ -93,6 +95,7 @@
         <type>skin</type>
         <attribute>health</attribute>
         <effect>3</effect>
+		<cost>4000</cost>
         <description>Human skin has far outlived its usefulness in an evolutionary aspect, not able to stop even the smallest of bullets. Therefore, we should remove the skin of a Liberal, and encase them in a metal shell!</description>
     </augmenttype>
 
@@ -101,6 +104,7 @@
         <type>skin</type>
         <attribute>wisdom</attribute>
         <effect>-3</effect>
+		<cost>500</cost>
         <description>By enhancing this Liberal's skin, they will be better prepared to fight off the words of the Conservative Swine, and less likely to be brainwashed to their side.</description>
     </augmenttype>
 
@@ -110,7 +114,7 @@
         <attribute>heart</attribute>
         <effect>3</effect>
         <cost>1000</cost>
-        <description>Numorous Liberal Reports have shown that by transplanting a gorilla heart into the body of an augmentee, their Liberal Devotion increases tenfold!</description>
+        <description>Numerous Liberal Reports have shown that by transplanting a gorilla heart into the body of an augmentee, their Liberal Devotion increases tenfold!</description>
     </augmenttype>
 
     <augmenttype idname="AUGMENTATION_ROCK_HARD_ABS">
@@ -118,7 +122,7 @@
         <type>body</type>
         <attribute>strength</attribute>
         <effect>2</effect>
-        <cost>999</cost>
+        <cost>1000</cost>
         <description>These abs are the result of centuries of Liberal science, perfected to the epitomy of all abs. They increase your core strength one hundred fold.</description>
     </augmenttype>
 
