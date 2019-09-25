@@ -56,7 +56,7 @@ getswingvoter(bool stalin)
    {
       int issue = randomissue(true);
       if (25+LCSrandom(50)-bias<((stalin&&stalinview(issue,false))?100-attitude[issue]:attitude[issue]))
-        shift_left(vote);
+          vote = shift_left(vote);
    }
    return vote;
 }
@@ -81,7 +81,7 @@ getsimplevoter(Alignment leaning)
    Alignment vote = shift_right(leaning);
    for (int i=0; i<2; i++)
      if (LCSrandom(100) < attitude[randomissue(true)])
-       shift_left(vote);
+         vote = shift_left(vote);
    return vote;
 }
 
@@ -490,7 +490,7 @@ elections(bool clearformess,bool canseethings)
       Alignment xvote = Alignment::ARCH_CONSERVATIVE;
       for (int i=0; i<4; i++)
         if (LCSrandom(100) < pmood)
-          shift_left(xvote);
+            xvote = shift_left(xvote);
 
       if (to_right_of(law[l], xvote)) lawdir[l] = 1;
       if (to_left_of(law[l], xvote)) lawdir[l] = -1;
@@ -778,7 +778,7 @@ elections_senate(int senmod,bool canseethings)
       vote = Alignment::ARCH_CONSERVATIVE;
       for(int i=0; i<4; i++)
         if (mood > LCSrandom(100))
-          shift_left(vote);
+            vote = shift_left(vote);
       if (stalinmode&&stalinmood<LCSrandom(100)&&stalinmood<LCSrandom(100)&&stalinmood<LCSrandom(100)&&stalinmood<LCSrandom(100))
         vote = Alignment::STALINIST;
 
@@ -793,7 +793,7 @@ elections_senate(int senmod,bool canseethings)
             vote2 = Alignment::ARCH_CONSERVATIVE;
             for (int i=0; i<4; i++)
               if (mood>LCSrandom(100))
-                shift_left(vote2);
+                  vote2 = shift_left(vote2);
             if (stalinmode&&stalinmood<LCSrandom(100)&&stalinmood<LCSrandom(100)&&stalinmood<LCSrandom(100)&&stalinmood<LCSrandom(100))
               vote2 = Alignment::STALINIST;
 
@@ -995,7 +995,7 @@ elections_house(bool canseethings)
       Alignment vote = Alignment::ARCH_CONSERVATIVE;
       for (int i=0; i<4; i++)
         if (mood>LCSrandom(100))
-          shift_left(vote);
+            vote = shift_left(vote);
       if(stalinmode&&stalinmood<LCSrandom(100)&&stalinmood<LCSrandom(100)&&stalinmood<LCSrandom(100)&&stalinmood<LCSrandom(100))
         vote = Alignment::STALINIST;
 
@@ -1009,7 +1009,7 @@ elections_house(bool canseethings)
             vote2 = Alignment::ARCH_CONSERVATIVE;
             for (int i=0; i<4; i++)
               if (mood>LCSrandom(100))
-                shift_left(vote2);
+                  vote2 = shift_left(vote2);
             if (stalinmode && stalinmood < LCSrandom(100) && stalinmood < LCSrandom(100) && stalinmood < LCSrandom(100) && stalinmood <LCSrandom(100))
               vote2 = Alignment::STALINIST;
 
@@ -1674,7 +1674,7 @@ congress(bool clearformess, bool canseethings)
       Alignment public_position = Alignment::ARCH_CONSERVATIVE;
       for(int i=0; i<4; i++)
         if (10+20*i<mood)
-          shift_left(public_position);
+            public_position = shift_left(public_position);
       if (to_right_of(law[l], public_position))
         pup += 600;
       if (to_left_of(law[l], public_position))
