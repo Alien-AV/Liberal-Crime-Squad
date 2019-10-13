@@ -1726,8 +1726,9 @@ void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
          show_victim_status(victim);
 
          mvaddstr(2,1,"Select an Augmentation");
-         for(p=page*19,y=4;p<AUGMENTATIONNUM&&p<page*19+19;p++,y++)
+         for(auto aug_index=0;aug_index<AUGMENTATIONNUM;aug_index++)
          {
+            auto y = aug_index + 4;
             bool already_augmented = victim->get_augmentation(y-4).type!=-1;
             if(already_augmented) set_color(COLOR_BLACK,COLOR_BLACK,1);
             else set_color(COLOR_WHITE,COLOR_BLACK,aug_c==y+'a'-4);
