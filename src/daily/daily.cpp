@@ -291,7 +291,7 @@ void advanceday(char& clearformess, char canseethings)
                   switch (fieldskillrate)
                   {
                      case FIELDSKILLRATE_FAST:
-                        squad[sq]->squad[i]->train(SKILL_DRIVING,5);break;
+                        squad[sq]->squad[i]->train(SKILL_DRIVING,20);break;
                      case FIELDSKILLRATE_CLASSIC:
                         squad[sq]->squad[i]->train(SKILL_DRIVING,5);break;
                      case FIELDSKILLRATE_HARD:

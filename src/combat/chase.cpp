@@ -602,7 +602,7 @@ void evasivedrive()
          switch (fieldskillrate)
          {
             case FIELDSKILLRATE_FAST:
-               activesquad->squad[p]->train(SKILL_DRIVING,LCSrandom(20));break;
+               activesquad->squad[p]->train(SKILL_DRIVING,LCSrandom(40));break;
             case FIELDSKILLRATE_CLASSIC:
                activesquad->squad[p]->train(SKILL_DRIVING,LCSrandom(20));break;
             case FIELDSKILLRATE_HARD:
