@@ -872,7 +872,7 @@ int buyprompt(const string &firstline, const string &secondline,
 }
 
 /* tells how many total members a squad has (including dead members) */
-int squadsize(const squadst *st)
+int count_members_in_squad(const squadst *st)
 {
    int partysize=0;
    if(st) for(int p=0;p<6;p++) if(st->squad[p]) partysize++;
@@ -880,7 +880,7 @@ int squadsize(const squadst *st)
 }
 
 /* tells how many members a squad has who are alive */
-int squadalive(const squadst *st)
+int count_live_members_in_squad(const squadst *st)
 {
    int partyalive=0;
    if(st) for(int p=0;p<6;p++) if(st->squad[p]) if(st->squad[p]->alive) partyalive++;

@@ -2762,46 +2762,42 @@ void adddeathmessage(Creature &cr)
 
 
 
+int count_live_liberals_at_location(int loc) {
+    auto libnum = 0;
+    for(int pl=0; pl < len(pool); pl++)
+    {
+        if (pool[pl]->location != loc)
+            continue;
+        if (pool[pl]->alive && pool[pl]->align == Alignment::LIBERAL)
+            libnum++;
+    }
+    return libnum;
+}
+
 /* pushes people into the current squad (used in a siege) */
-void autopromote(int loc)
-{
-   if(!activesquad) return;
+void auto_promote_available_liberals_into_squad(int loc) {
+    if (activesquad == nullptr) return;
+    if (count_live_members_in_squad(activesquad) == 6) return;
+    if (count_members_in_squad(activesquad) == count_live_liberals_at_location(loc)) return;
 
-   int partysize=squadsize(activesquad),partyalive=squadalive(activesquad),libnum=0;
-
-   if(partyalive==6) return;
-
-   for(int pl=0;pl<len(pool);pl++)
-   {
-      if (pool[pl]->location != loc)
-        continue;
-      if (pool[pl]->alive && pool[pl]->align == Alignment::LIBERAL)
-        libnum++;
-   }
-
-   if(partysize==libnum) return;
-
-   char conf;
-   for(int p=0;p<6;p++)
-   {
-      conf=0;
-      if(activesquad->squad[p]==NULL) conf=1;
-      else if(!activesquad->squad[p]->alive) conf=1;
-
-      if(conf)
-      {
-         for(int pl=0;pl<len(pool);pl++)
-         {
-            if(pool[pl]->location!=loc) continue;
-            if(pool[pl]->alive&&pool[pl]->squadid==-1&&
-               pool[pl]->align == Alignment::LIBERAL)
-            {
-               if(activesquad->squad[p]!=NULL) activesquad->squad[p]->squadid=-1;
-               activesquad->squad[p]=pool[pl];
-               activesquad->squad[p]->squadid=activesquad->id;
-               break;
+    for (auto sq_index = 0; sq_index < 6; sq_index++) {
+        if (activesquad->squad[sq_index] != nullptr) {
+            if (activesquad->squad[sq_index]->alive) {
+                continue;
+            } else {
+                activesquad->squad[sq_index]->squadid = -1;
+                activesquad->squad[sq_index] = nullptr;
             }
-         }
-      }
-   }
+        }
+
+        for (auto pool_index = 0; pool_index < len(pool); pool_index++) {
+            if (pool[pool_index]->location != loc) continue;
+            if (pool[pool_index]->alive && pool[pool_index]->squadid == -1 &&
+                pool[pool_index]->align == Alignment::LIBERAL) {
+                activesquad->squad[sq_index] = pool[pool_index];
+                activesquad->squad[sq_index]->squadid = activesquad->id;
+                break;
+            }
+        }
+    }
 }

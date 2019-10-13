@@ -149,7 +149,7 @@ void disguisecheck(int timer)
       " laughs nervously."
    };
 
-   int weapon=0,partysize=squadsize(activesquad),blew_it=-1;
+   int weapon=0,partysize= count_members_in_squad(activesquad),blew_it=-1;
    bool forcecheck=false,spotted=false;
    //int weaponar[6]={0};
 

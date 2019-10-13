@@ -206,7 +206,7 @@ void Shop::choose(squadst& customers, int& buyer) const
 
 void Shop::browse_halfscreen(squadst& customers, int& buyer) const
 {
-   int page=0,partysize=squadsize(&customers);
+   int page=0,partysize= count_members_in_squad(&customers);
 
    std::vector<ShopOption*> available_options=options_;
 
@@ -407,7 +407,7 @@ void Shop::browse_fullscreen(squadst& customers, int& buyer) const
 
 void Shop::sell_loot(squadst& customers) const
 {
-   int partysize=squadsize(&customers);
+   int partysize= count_members_in_squad(&customers);
 
    while(true)
    {
@@ -685,7 +685,7 @@ void Shop::choose_buyer(squadst& customers, int& buyer) const
 {
    party_status=-1;
 
-   int partysize=squadsize(&customers);
+   int partysize= count_members_in_squad(&customers);
 
    if(partysize<=1) return;
 

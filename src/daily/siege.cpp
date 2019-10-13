@@ -2058,7 +2058,7 @@ char sally_forth_aux(int loc)
       for(int e=0;e<ENCMAX;e++) if(encounter[e].exists) encsize++;
 
       // Let's roll
-      autopromote(loc);
+       auto_promote_available_liberals_into_squad(loc);
       erase();
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -2295,7 +2295,7 @@ void sally_forth()
    }
 
    //MAKE SURE PARTY IS ORGANIZED
-   autopromote(loc);
+    auto_promote_available_liberals_into_squad(loc);
 
    //START FIGHTING
    newsstoryst *ns=new newsstoryst;
@@ -2425,7 +2425,7 @@ void escape_engage()
    }
 
    //MAKE SURE PARTY IS ORGANIZED
-   autopromote(loc);
+    auto_promote_available_liberals_into_squad(loc);
 
    //START FIGHTING
    newsstoryst *ns=new newsstoryst;

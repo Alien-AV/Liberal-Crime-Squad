@@ -1065,9 +1065,9 @@ int buyprompt(const string &firstline,const string &secondline,
               const vector< pair<string,int> > &nameprice,int namepaddedlength,
               const string &producttype,const string &exitstring);
 /* tells how many total members a squad has (including dead members) */
-int squadsize(const squadst *st);
+int count_members_in_squad(const squadst *st);
 /* tells how many members a squad has who are alive */
-int squadalive(const squadst *st);
+int count_live_members_in_squad(const squadst *st);
 
 
 /*
@@ -1549,7 +1549,7 @@ char incapacitated(Creature &a,char noncombat,char &printed);
 /* describes a character's death */
 void adddeathmessage(Creature &cr);
 /* pushes people into the current squad (used in a siege) */
-void autopromote(int loc);
+void auto_promote_available_liberals_into_squad(int loc);
 
 /*
  chase.cpp

@@ -172,7 +172,7 @@ void orderparty()
 {
    party_status=-1;
 
-   int partysize=squadsize(activesquad);
+   int partysize= count_members_in_squad(activesquad);
 
    if(partysize<=1) return;
 
@@ -245,7 +245,7 @@ void stopevil()
          temploc.push_back(l);
 
    // Determine cost of tickets for travel
-   int ticketprice=100*squadsize(activesquad);
+   int ticketprice= 100 * count_members_in_squad(activesquad);
 
    while(true)
    {

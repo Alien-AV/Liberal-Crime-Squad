@@ -546,7 +546,7 @@ char radio_broadcast()
 
    getkey();
 
-   int segmentpower=0,partysize=squadalive(activesquad),p=0;
+   int segmentpower=0,partysize= count_live_members_in_squad(activesquad),p=0;
 
    for(p=0;p<6;p++)
    {
@@ -812,7 +812,7 @@ char news_broadcast()
 
    getkey();
 
-   int segmentpower=0,partysize=squadalive(activesquad);
+   int segmentpower=0,partysize= count_live_members_in_squad(activesquad);
    for(p=0;p<6;p++)
    {
       if(activesquad->squad[p]!=NULL)

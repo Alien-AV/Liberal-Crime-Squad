@@ -870,7 +870,7 @@ void assemblesquad(squadst *cursquad)
 
    while(true)
    {
-      partysize=squadsize(cursquad);
+      partysize= count_members_in_squad(cursquad);
 
       erase();
 
@@ -1120,7 +1120,7 @@ void assemblesquad(squadst *cursquad)
    }
 
    //FINALIZE NEW SQUADS
-   bool hasmembers=squadsize(cursquad)>0;
+   bool hasmembers=count_members_in_squad(cursquad)>0;
 
    if(newsquad)
    {

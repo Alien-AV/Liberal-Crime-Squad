@@ -84,7 +84,7 @@ void creatureadvance()
          advancecreature(*pool[p]);
       }
 
-      autopromote(cursite);
+       auto_promote_available_liberals_into_squad(cursite);
    }
 
    for(e=0;e<ENCMAX;e++)

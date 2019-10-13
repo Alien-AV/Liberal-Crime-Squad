@@ -43,7 +43,7 @@ void hospital(int loc)
    music.play(MUSIC_SHOPPING);
    locatesquad(activesquad,loc);
 
-   int partysize=squadsize(activesquad);
+   int partysize= count_members_in_squad(activesquad);
 
    while(true)
    {
@@ -151,7 +151,7 @@ void dealership(int loc)
 
    locatesquad(activesquad,loc);
 
-   int partysize=squadsize(activesquad);
+   int partysize= count_members_in_squad(activesquad);
 
    while(true)
    {
@@ -364,7 +364,7 @@ void choose_buyer(short &buyer)
 {
    party_status=-1;
 
-   int partysize=squadsize(activesquad);
+   int partysize= count_members_in_squad(activesquad);
 
    if(partysize<=1) return;
 

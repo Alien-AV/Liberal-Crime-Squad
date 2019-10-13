@@ -242,7 +242,7 @@ void mode_site()
 
    while(true)
    {
-      int partysize=squadsize(activesquad),partyalive=squadalive(activesquad),hostages=0,encsize=0,freeable=0,enemy=0,majorenemy=0,talkers=0;
+      int partysize= count_members_in_squad(activesquad),partyalive= count_live_members_in_squad(activesquad),hostages=0,encsize=0,freeable=0,enemy=0,majorenemy=0,talkers=0;
       for(p=0;p<6;p++)
          if(activesquad->squad[p]!=NULL)
             if(activesquad->squad[p]->prisoner&&activesquad->squad[p]->prisoner->align!=Alignment::LIBERAL)
@@ -1095,7 +1095,7 @@ void mode_site()
          if(c=='r'&&location[cursite]->siege.siege&&libnum>6)
          {
             assemblesquad(activesquad);
-            autopromote(cursite);
+             auto_promote_available_liberals_into_squad(cursite);
          }
          else if(freeable&&(!enemy||!sitealarm)&&c=='r'&&!location[cursite]->siege.siege)
          {

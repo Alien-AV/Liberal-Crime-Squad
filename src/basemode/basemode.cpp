@@ -290,7 +290,7 @@ void mode_base()
          nonsighttime=0;
       }
 
-      int partysize=squadsize(activesquad);
+      int partysize= count_members_in_squad(activesquad);
       if(activesquad&&!partysize)
       {
          delete_and_remove(squad,getsquad(activesquad->id));
