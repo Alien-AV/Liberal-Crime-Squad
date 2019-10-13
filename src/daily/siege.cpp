@@ -2316,73 +2316,76 @@ void sally_forth()
    }
 }
 
+void show_siege_info_screen(int loc){
+    erase();
+    set_color(COLOR_RED,COLOR_BLACK,1);
+    move(1,26);
+    addstr("UNDER ATTACK: ESCAPE OR ENGAGE");
+
+    set_color(COLOR_WHITE,COLOR_BLACK,0);
+    move(3,16);
+    addstr("You are about to engage Conservative forces in battle.");
+    move(4,11);
+    addstr("You will find yourself in the Liberal safehouse, and it will");
+    move(5,11);
+    addstr("be swarming with Conservative units.  The Liberal Crime");
+    move(6,11);
+    addstr("Squad will be located far from the entrance to the safehouse.");
+    move(7,11);
+    addstr("It is your task to bring your squad out to safety, or fight");
+    move(8,11);
+    addstr("off the Conservatives within the perimeter.  Either way you");
+    move(9,11);
+    addstr("choose, any equipment from the safehouse which isn't held by a");
+    move(10,11);
+    addstr("Liberal will be scattered about the compound.  Save what");
+    move(11,11);
+    addstr("you can.  You might notice your Squad has filled out to");
+    move(12,11);
+    addstr("six members if any were available.  If you have a larger pool");
+    move(13,11);
+    addstr("of Liberals, they will be traveling behind the Squad.");
+    move(14,11);
+    addstr("There is a new button, (R)eorganize, which reflects this.");
+    move(15,11);
+    addstr("Squad members in the back with firearms can provide cover");
+    move(16,11);
+    addstr("fire.  If you have at least six people total, then six must");
+    move(17,11);
+    addstr("be in the Squad.  If less than six, then they all must.");
+
+    if(location[loc]->compound_walls&COMPOUND_CAMERAS)
+    {
+        move(18,16);
+        addstr("Your security cameras let you see units on the (M)ap.");
+    }
+    if(location[loc]->compound_walls&COMPOUND_TRAPS)
+    {
+        move(19,16);
+        addstr("Your traps will harass the enemy, but not the Squad.");
+    }
+
+    set_color(COLOR_RED,COLOR_BLACK,1);
+    move(23,11);
+    addstr("Press any key to Confront the Conservative Aggressors");
+
+    // Seperate logging text
+    gamelog.log("Your Liberals confront the Conservatives within the safehouse.");
+
+    getkey();
+}
 
 /* siege - prepares for entering site mode to fight the siege */
 void escape_engage()
 {
    music.play(MUSIC_DEFENSE);
-   //GIVE INFO SCREEN
-   erase();
-   set_color(COLOR_RED,COLOR_BLACK,1);
-   move(1,26);
-   addstr("UNDER ATTACK: ESCAPE OR ENGAGE");
 
-   set_color(COLOR_WHITE,COLOR_BLACK,0);
-   move(3,16);
-   addstr("You are about to engage Conservative forces in battle.");
-   move(4,11);
-   addstr("You will find yourself in the Liberal safehouse, and it will");
-   move(5,11);
-   addstr("be swarming with Conservative units.  The Liberal Crime");
-   move(6,11);
-   addstr("Squad will be located far from the entrance to the safehouse.");
-   move(7,11);
-   addstr("It is your task to bring your squad out to safety, or fight");
-   move(8,11);
-   addstr("off the Conservatives within the perimeter.  Either way you");
-   move(9,11);
-   addstr("choose, any equipment from the safehouse which isn't held by a");
-   move(10,11);
-   addstr("Liberal will be scattered about the compound.  Save what");
-   move(11,11);
-   addstr("you can.  You might notice your Squad has filled out to");
-   move(12,11);
-   addstr("six members if any were available.  If you have a larger pool");
-   move(13,11);
-   addstr("of Liberals, they will be traveling behind the Squad.");
-   move(14,11);
-   addstr("There is a new button, (R)eorganize, which reflects this.");
-   move(15,11);
-   addstr("Squad members in the back with firearms can provide cover");
-   move(16,11);
-   addstr("fire.  If you have at least six people total, then six must");
-   move(17,11);
-   addstr("be in the Squad.  If less than six, then they all must.");
+    int loc=-1;
+    if(selectedsiege!=-1) loc=selectedsiege;
+    if(activesquad!=NULL) loc=activesquad->squad[0]->location;
+    if(loc == -1) return;
 
-   int loc=-1;
-   if(selectedsiege!=-1) loc=selectedsiege;
-   if(activesquad!=NULL) loc=activesquad->squad[0]->location;
-   if(loc == -1) return;
-
-   if(location[loc]->compound_walls&COMPOUND_CAMERAS)
-   {
-      move(18,16);
-      addstr("Your security cameras let you see units on the (M)ap.");
-   }
-   if(location[loc]->compound_walls&COMPOUND_TRAPS)
-   {
-      move(19,16);
-      addstr("Your traps will harass the enemy, but not the Squad.");
-   }
-
-   set_color(COLOR_RED,COLOR_BLACK,1);
-   move(23,11);
-   addstr("Press any key to Confront the Conservative Aggressors");
-
-   // Seperate logging text
-   gamelog.log("Your Liberals confront the Conservatives within the safehouse.");
-
-   getkey();
+   show_siege_info_screen(loc);
 
    if(location[loc]->siege.siegetype==SIEGE_CCS&&location[loc]->type==SITE_INDUSTRY_WAREHOUSE)
       location[loc]->renting=RENTING_CCS; // CCS Captures warehouse -- this will be reversed if you fight them off
@@ -2390,22 +2393,23 @@ void escape_engage()
    //CRIMINALIZE
    if(location[loc]->siege.siegetype==SIEGE_POLICE) criminalizepool(LAWFLAG_RESIST,-1,loc);
 
-   //DELETE ALL SQUADS IN THIS AREA UNLESS THEY ARE THE activesquad
-   for(int sq=len(squad)-1;sq>=0;sq--)
-      if(squad[sq]!=activesquad&&squad[sq]->squad[0])
-         if(squad[sq]->squad[0]->location==loc)
-         {
-            if(activesquad)
-            {
-               for(int p=0;p<6;p++)
-               {
-                  if(!squad[sq]->squad[p]) continue;
-                  squad[sq]->squad[p]->squadid=-1;
-               }
-               delete_and_remove(squad,sq);
+    //DELETE ALL SQUADS IN THIS AREA UNLESS THEY ARE THE activesquad
+    for (int squad_index = len(squad) - 1; squad_index >= 0; squad_index--) {
+        if (squad[squad_index] != activesquad && squad[squad_index]->squad[0]) {
+            if (squad[squad_index]->squad[0]->location == loc) {
+                if (activesquad) {
+                    for (int squaddie_index = 0; squaddie_index < 6; squaddie_index++)
+                    {
+                        if (squad[squad_index]->squad[squaddie_index] != nullptr) {
+                            squad[squad_index]->squad[squaddie_index]->squadid = -1;
+                        }
+                    }
+
+                    delete_and_remove(squad, squad_index);
+                } else activesquad = squad[squad_index];
             }
-            else activesquad = squad[sq];
-         }
+        }
+    }
 
    // No squads at the location? Form a new one.
    if(!activesquad)
@@ -2415,11 +2419,15 @@ void escape_engage()
       strcpy(squad.back()->name,location[selectedsiege]->getname(true));
       strcat(squad.back()->name," Defense");
       int i=0;
-      for(int p=0;p<len(pool);p++) if(pool[p]->location==selectedsiege&&pool[p]->alive&&pool[p]->align == Alignment::LIBERAL)
-      {
-         squad.back()->squad[i]=pool[p];
-         pool[p]->squadid=squad.back()->id;
-         if(++i>=6) break;
+      for(int p=0;p<len(pool);p++) {
+          if (pool[p]->location == selectedsiege &&
+                pool[p]->alive &&
+                pool[p]->align == Alignment::LIBERAL)
+          {
+              squad.back()->squad[i] = pool[p];
+              pool[p]->squadid = squad.back()->id;
+              if (++i >= 6) break;
+          }
       }
       activesquad = squad.back();
    }
