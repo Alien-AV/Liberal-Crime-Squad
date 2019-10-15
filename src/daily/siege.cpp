@@ -2104,6 +2104,7 @@ char sally_forth_aux(int loc)
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(9,1);
          addstr("C - Reflect on your Conservative judgment.");
+         cleanup_squads_saved_for_restoration_after_siege();
       }
 
       // Enemies
@@ -2376,6 +2377,15 @@ void show_siege_info_screen(int loc){
     getkey();
 }
 
+vector<squadst *> squads_saved_for_restoration_after_siege;
+
+void cleanup_squads_saved_for_restoration_after_siege() {
+    for(auto saved_squad : squads_saved_for_restoration_after_siege){
+        delete saved_squad;
+    }
+    squads_saved_for_restoration_after_siege.clear();
+}
+
 /* siege - prepares for entering site mode to fight the siege */
 void escape_engage()
 {
@@ -2395,20 +2405,21 @@ void escape_engage()
    if(location[loc]->siege.siegetype==SIEGE_POLICE) criminalizepool(LAWFLAG_RESIST,-1,loc);
 
     //DELETE ALL SQUADS IN THIS AREA UNLESS THEY ARE THE activesquad
+    squads_saved_for_restoration_after_siege.clear();
     for (int squad_index = len(squad) - 1; squad_index >= 0; squad_index--) {
-        if (squad[squad_index] != activesquad && squad[squad_index]->squad[0]) {
-            if (squad[squad_index]->squad[0]->location == loc) {
-                if (activesquad) {
-                    for (int squaddie_index = 0; squaddie_index < 6; squaddie_index++)
-                    {
-                        if (squad[squad_index]->squad[squaddie_index] != nullptr) {
-                            squad[squad_index]->squad[squaddie_index]->squadid = -1;
-                        }
+        if (squad[squad_index] != activesquad &&
+            squad[squad_index]->squad[0] &&
+            squad[squad_index]->squad[0]->location == loc) {
+            if (activesquad) {
+                for (int squaddie_index = 0; squaddie_index < 6; squaddie_index++)
+                {
+                    if (squad[squad_index]->squad[squaddie_index] != nullptr) {
+                        squad[squad_index]->squad[squaddie_index]->squadid = -1;
                     }
-
-                    delete_and_remove(squad, squad_index);
-                } else activesquad = squad[squad_index];
-            }
+                }
+                squads_saved_for_restoration_after_siege.insert(squads_saved_for_restoration_after_siege.cbegin(), squad[squad_index]);
+                squad.erase(squad.begin() + squad_index);
+            } else activesquad = squad[squad_index];
         }
     }
 
@@ -2445,6 +2456,13 @@ void escape_engage()
    ns->siegetype=location[loc]->siege.siegetype;
    newsstory.push_back(ns);
    mode_site(loc);
+}
+
+bool remove_from_squad(squadst *squad, Creature* squaddie) {    //assumes single copy of a squaddie in a squad
+    auto new_end_iter = std::remove(std::begin(squad->squad), std::end(squad->squad), squaddie);
+    auto removed_any = new_end_iter != std::end(squad->squad);
+    if(removed_any) *new_end_iter = nullptr;
+    return removed_any;
 }
 
 /* siege - what happens when you escaped the siege */
@@ -2533,6 +2551,30 @@ void escapesiege(char won)
       location[cursite]->front_business=-1;
       initlocation(*location[cursite]);
    }
+   else {
+       for(auto saved_squad : squads_saved_for_restoration_after_siege){
+		   auto at_least_one_alive = false;
+           for(auto squaddie : saved_squad->squad){
+               if(squaddie && squaddie->alive){
+                   if(squaddie->squadid == activesquad->id){
+                       remove_from_squad(activesquad, squaddie);
+                   }
+                   squaddie->squadid = saved_squad->id;
+				   at_least_one_alive = true;
+               }
+           }
+		   if (at_least_one_alive) {
+			   squad.push_back(saved_squad);
+		   }
+		   else
+		   {
+			   delete saved_squad;
+		   }
+       }
+	   squads_saved_for_restoration_after_siege.clear();
+   }
+
+    cleanup_squads_saved_for_restoration_after_siege();
 
    //SET UP NEW SIEGE CHARACTERISTICS, INCLUDING TIMING
    location[cursite]->siege.siege=0;

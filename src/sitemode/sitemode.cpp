@@ -595,12 +595,11 @@ void mode_site()
          {
             if(location[cursite]->siege.siege)
             {
+               cleanup_squads_saved_for_restoration_after_siege();
                if(location[cursite]->siege.underattack)sitestory->type=NEWSSTORY_SQUAD_KILLED_SIEGEATTACK;
                else sitestory->type=NEWSSTORY_SQUAD_KILLED_SIEGEESCAPE;
             }
             else
-
-            if(!location[cursite]->siege.siege)
             {
                sitestory->type=NEWSSTORY_SQUAD_KILLED_SITE;
 
@@ -1825,7 +1824,7 @@ void mode_site()
                //You didn't survive -- handle squad death (unless that ended the game)
                else if(!endcheck())
                {
-
+                  cleanup_squads_saved_for_restoration_after_siege();
                   if(location[cursite]->siege.siege)
                   {
                      //Report on squad killed during siege

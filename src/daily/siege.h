@@ -70,4 +70,8 @@ conquertextccs();
 void
 statebrokenlaws(Creature const& cr);
 
+void
+cleanup_squads_saved_for_restoration_after_siege();
+//todo: instead all places should probably call "siege_ended" from this file, which doesn't exist yet
+
 #endif /* LCS_DAILY_SIEGE_H */
