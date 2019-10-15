@@ -449,13 +449,9 @@ struct squadst
 
    char stance; // Squad's site action stance: high profile, low profile, etc.
 
-   squadst()
-   {
-      for(int p=0;p<6;p++) squad[p]=NULL;
-      strcpy(name,"");
-      activity.type=ACTIVITY_NONE,id=-1,stance=SQUADSTANCE_STANDARD;
-   }
-   ~squadst() { delete_and_clear(loot); }
+   squadst();
+   ~squadst();
+   bool remove_from_squad(Creature* squaddie);
 };
 
 

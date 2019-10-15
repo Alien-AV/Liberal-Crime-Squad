@@ -2458,11 +2458,27 @@ void escape_engage()
    mode_site(loc);
 }
 
-bool remove_from_squad(squadst *squad, Creature* squaddie) {    //assumes single copy of a squaddie in a squad
-    auto new_end_iter = std::remove(std::begin(squad->squad), std::end(squad->squad), squaddie);
-    auto removed_any = new_end_iter != std::end(squad->squad);
-    if(removed_any) *new_end_iter = nullptr;
-    return removed_any;
+void restore_squads_after_siege() {
+    for(auto saved_squad : squads_saved_for_restoration_after_siege){
+        auto at_least_one_alive = false;
+        for(auto squaddie : saved_squad->squad){
+            if(squaddie && squaddie->alive){
+                if(squaddie->squadid == activesquad->id){
+                    activesquad->remove_from_squad(squaddie);
+                }
+                squaddie->squadid = saved_squad->id;
+                at_least_one_alive = true;
+            }
+        }
+        if (at_least_one_alive) {
+            squad.push_back(saved_squad);
+        }
+        else
+        {
+            delete saved_squad;
+        }
+    }
+    squads_saved_for_restoration_after_siege.clear();
 }
 
 /* siege - what happens when you escaped the siege */
@@ -2552,26 +2568,7 @@ void escapesiege(char won)
       initlocation(*location[cursite]);
    }
    else {
-       for(auto saved_squad : squads_saved_for_restoration_after_siege){
-		   auto at_least_one_alive = false;
-           for(auto squaddie : saved_squad->squad){
-               if(squaddie && squaddie->alive){
-                   if(squaddie->squadid == activesquad->id){
-                       remove_from_squad(activesquad, squaddie);
-                   }
-                   squaddie->squadid = saved_squad->id;
-				   at_least_one_alive = true;
-               }
-           }
-		   if (at_least_one_alive) {
-			   squad.push_back(saved_squad);
-		   }
-		   else
-		   {
-			   delete saved_squad;
-		   }
-       }
-	   squads_saved_for_restoration_after_siege.clear();
+       restore_squads_after_siege();
    }
 
     cleanup_squads_saved_for_restoration_after_siege();
