@@ -217,7 +217,7 @@ void juiceparty(long juice, long cap)
 }
 
 /* common - gives juice to a given creature */
-void addjuice(Creature &cr,long juice,long cap)
+void addjuice(Creature &cr,short juice,long cap)
 {
    // Ignore zero changes
    if(juice==0) return;

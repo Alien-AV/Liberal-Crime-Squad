@@ -1162,7 +1162,7 @@ bool drivingupdate(short &obstacle)
    }
 
    //SET UP NEXT OBSTACLE
-   if(!LCSrandom(3)) obstacle=LCSrandom(CARCHASE_OBSTACLENUM);
+   if(!LCSrandom(3)) obstacle=(short)LCSrandom(CARCHASE_OBSTACLENUM);
    else obstacle=-1;
 
    return 0;
@@ -1549,17 +1549,17 @@ void crashfriendlycar(int v)
                if(LCSrandom(2))
                {
                   activesquad->squad[p]->wound[w] |= (WOUND_TORN|WOUND_BLEEDING);
-                  activesquad->squad[p]->blood -= 1 + LCSrandom(25);
+                  activesquad->squad[p]->blood -= 1 + (short)LCSrandom(25);
                }
                if(!LCSrandom(3))
                {
                   activesquad->squad[p]->wound[w] |= (WOUND_CUT|WOUND_BLEEDING);
-                  activesquad->squad[p]->blood -= 1 + LCSrandom(25);
+                  activesquad->squad[p]->blood -= 1 + (short)LCSrandom(25);
                }
                if(LCSrandom(2) || activesquad->squad[p]->wound[w] == 0)
                {
                   activesquad->squad[p]->wound[w] |= WOUND_BRUISED;
-                  activesquad->squad[p]->blood -= 1 + LCSrandom(10);
+                  activesquad->squad[p]->blood -= 1 + (short)LCSrandom(10);
                }
             }
 

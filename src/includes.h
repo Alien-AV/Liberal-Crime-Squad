@@ -1010,7 +1010,7 @@ void criminalize(Creature &cr,short crime);
 /* common - gives juice to everyone in the active party */
 void juiceparty(long juice,long cap);
 /* common - gives juice to a given creature */
-void addjuice(Creature &cr,long juice,long cap);
+void addjuice(Creature &cr,short juice,long cap);
 /* common - removes the liberal from all squads */
 void removesquadinfo(Creature &cr);
 /* common - purges empty squads from existance */

@@ -26,6 +26,8 @@
 
 #include <externs.h>
 
+//todo: fix not using stealth when picking locks near moderates
+
 /* checks if your liberal activity is noticed */
 void noticecheck(int exclude,int difficulty)
 {

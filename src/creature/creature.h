@@ -187,7 +187,7 @@ enum SpecialWounds
 #define WOUND_CLEANOFF BIT8
 
 
-class activityst;
+struct activityst;
 class Armor;
 class ArmorType;
 class Clip;

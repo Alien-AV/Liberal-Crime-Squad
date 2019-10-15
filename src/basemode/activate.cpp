@@ -1742,7 +1742,7 @@ void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
             aug_type.clear();
             if(victim->get_augmentation(aug_c-'a').type==-1) //False if already augmented on that bodypart.
             {
-               for(int x=0,y=5;x<augmenttype.size();x++)
+               for(size_t x=0,y=5;x<augmenttype.size();x++)
                {
                   if(augmenttype[x]->get_type()==aug_c-'a'&&
                         (augmenttype[x]->get_max_age()==-1||victim->age<=augmenttype[x]->get_max_age())&&

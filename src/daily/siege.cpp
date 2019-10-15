@@ -2022,6 +2022,7 @@ char sally_forth_aux(int loc)
    case SIEGE_CCS:
    case SIEGE_FIREMEN:
    default:
+       //todo: decide here regarding the comment below
       // So yeah, WTF is the reason there isn't a break statement here???
       // If everything ends up in the SIEGE_POLICE case we shouldn't even have a switch statement here at all.
    case SIEGE_POLICE: // Currently only police sieges should allow this
