@@ -1014,17 +1014,17 @@ void assemblesquad(squadst *cursquad)
             {
                if(temppool[p]->squadid==cursquad->id)
                {
-                  bool flipstart=0;
+                  bool removing_from_squad=false;
                   for(int pt=0;pt<6;pt++)
                   {
                      if(cursquad->squad[pt]==temppool[p])
                      {
-                        flipstart=1;
+                        removing_from_squad=true;
                         cursquad->squad[pt]->squadid=-1;
                      }
-                     if(flipstart&&pt<5)cursquad->squad[pt]=cursquad->squad[pt+1];
+                     if(removing_from_squad && pt < 5)cursquad->squad[pt]=cursquad->squad[pt + 1];
                   }
-                  if(flipstart)cursquad->squad[5]=NULL;
+                  if(removing_from_squad)cursquad->squad[5]=NULL;
                }
                else if(partysize<6)
                {
