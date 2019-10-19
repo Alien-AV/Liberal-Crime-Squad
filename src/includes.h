@@ -1488,7 +1488,7 @@ enum CheckDifficulty
  stealth.cpp
 */
 /* checks if your liberal activity is noticed */
-void noticecheck(int exclude,int difficulty=DIFFICULTY_EASY);
+void is_your_activity_noticed(int exclude, int difficulty=DIFFICULTY_EASY);
 /* checks if your liberal behavior/attack alienates anyone */
 char alienationcheck(char mistake);
 /* checks if conservatives see through your disguise */

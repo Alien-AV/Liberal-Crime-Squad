@@ -28,41 +28,48 @@
 
 //todo: fix not using stealth when picking locks near moderates
 
-/* checks if your liberal activity is noticed */
-void noticecheck(int exclude,int difficulty)
-{
-   if(sitealarm) return;
+void is_your_activity_noticed(int exclude, int difficulty) {
+    if (sitealarm) return;
 
-   char sneak=0;
+    char sneak = 0;
 
-   int topi=0;
-   for(int i=0;i<6;++i) if(activesquad->squad[i]&&activesquad->squad[i]->get_skill(SKILL_STEALTH)>sneak)
-      sneak=activesquad->squad[i]->get_skill(SKILL_STEALTH),topi=i;
+    int topi = 0;
+    for (int i = 0; i < 6; ++i) {
+        if (activesquad->squad[i] && activesquad->squad[i]->get_skill(SKILL_STEALTH) > sneak) {
+            sneak = activesquad->squad[i]->get_skill(SKILL_STEALTH);
+            topi = i;
+        }
+    }
 
-   for(int e=0;e<ENCMAX;e++)
-   {  //Prisoners shouldn't shout for help.
-      if(!strcmp(encounter[e].name,"Prisoner")||e==exclude||encounter[e].exists==false||activesquad->squad[topi]->skill_check(SKILL_STEALTH,difficulty)) continue;
-      else
-      {
-         clearmessagearea();
+    for (int e = 0; e < ENCMAX; e++) {
+        if (!strcmp(encounter[e].name, "Prisoner") ||   //Prisoners shouldn't shout for help.
+            e == exclude ||
+            !encounter[e].exists ||
+            activesquad->squad[topi]->skill_check(SKILL_STEALTH, difficulty)) {
+            continue;
+        } else {
+            clearmessagearea();
 
-         set_color(COLOR_RED,COLOR_BLACK,1);
-         move(16,1);
-         addstr(encounter[e].name, gamelog);
-         addstr(" observes your Liberal activity ", gamelog);
-         move(17,1);
-         if(encounter[e].align==Alignment::CONSERVATIVE)
-            addstr("and lets forth a piercing Conservative alarm cry!", gamelog);
-         else addstr("and shouts for help!", gamelog);
-         gamelog.newline();
+            set_color(COLOR_RED, COLOR_BLACK, 1);
+            move(16, 1);
+            addstr(encounter[e].name, gamelog);
+            addstr(" observes your Liberal activity ", gamelog);
+            move(17, 1);
+            if (encounter[e].align == Alignment::CONSERVATIVE) {
+                addstr("and lets forth a piercing Conservative alarm cry!", gamelog);
+            }
+            else {
+                addstr("and shouts for help!", gamelog);
+            }
+            gamelog.newline();
 
-         sitealarm=1;
+            sitealarm = 1;
 
-         getkey();
+            getkey();
 
-         break;
-      }
-   }
+            break;
+        }
+    }
 }
 
 

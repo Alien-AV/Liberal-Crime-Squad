@@ -1557,7 +1557,7 @@ void mode_site()
                int beststealer=0;
                juiceparty(1,200);
                alienationcheck(0);
-               noticecheck(-1);
+                is_your_activity_noticed(-1);
                sitecrime++;
                sitestory->crime.push_back(CRIME_STOLEGROUND);
                if(enemy)
@@ -2707,7 +2707,7 @@ void open_door(bool restricted)
             if(actual)
             {
                alienationcheck(0);
-               noticecheck(-1);
+                is_your_activity_noticed(-1);
             }
             return;
          }
@@ -2763,7 +2763,7 @@ void open_door(bool restricted)
             if(actual)
             {
                alienationcheck(1);
-               noticecheck(-1,DIFFICULTY_HEROIC);
+                is_your_activity_noticed(-1, DIFFICULTY_HEROIC);
             }
 
             break;
