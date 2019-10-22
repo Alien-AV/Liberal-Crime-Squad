@@ -1198,10 +1198,18 @@ void printliberalstats(Creature &cr)
       else addstr("On \"Foot\"");
    }
 
+    for(int i=0;i<len(pool);i++) {
+        if (pool[i]->id == cr.hireid) {
+            move(18,55);
+            addstr("Contact: ");
+            addstr(std::string(pool[i]->name).substr(0,15));
+            break;
+        }
+    }
    // Add recruit stats
    if(cr.flag!=CREATUREFLAG_BRAINWASHED)
    {
-      move(18,55);
+      move(19,55);
       addstr(maxsubordinates(cr)-subordinatesleft(cr));
       addstr(" Recruits / ");
       addstr(maxsubordinates(cr));
@@ -1209,19 +1217,19 @@ void printliberalstats(Creature &cr)
    }
    else
    {
-      move(18,55);
+      move(19,55);
       addstr("Enlightened ");
       addstr("Can't Recruit");
    }
    // Any meetings with potential recruits scheduled?
    if(scheduledmeetings(cr))
    {
-      move(20,55);
+      move(21,55);
       addstr("Scheduled Meetings: ");
       addstr(scheduledmeetings(cr));
    }
    // Add seduction stats
-   move(19,55);
+   move(20,55);
    int lovers = loveslaves(cr);
    if(cr.flag & CREATUREFLAG_LOVESLAVE)
       lovers++;
@@ -1234,7 +1242,7 @@ void printliberalstats(Creature &cr)
    // Any dates with potential love interests scheduled?
    if(scheduleddates(cr))
    {
-      move(21,55);
+      move(22,55);
       addstr("Scheduled Dates:    ");
       addstr(scheduleddates(cr));
    }
