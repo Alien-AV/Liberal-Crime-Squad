@@ -262,7 +262,7 @@ void disguisecheck(int timer)
             disguise_difficulty += 3;
          }
          // Sneaking with a party is hard
-         stealth_difficulty += (partysize-1)*3;
+         stealth_difficulty += (partysize-1);
 
          // Make the attempt!
          for(int i=0;i<6;i++)
