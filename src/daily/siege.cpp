@@ -489,7 +489,7 @@ void siegecheck(bool canseethings)
                !(location[l]->siege.timeuntillocated>=0)) //Do not re-plan siege.
             {
                // Set time until siege is carried out
-               location[l]->siege.timeuntillocated += 2 + LCSrandom(6);
+               location[l]->siege.timeuntillocated += 2 + (short)LCSrandom(6);
             }
          }
 
@@ -668,7 +668,7 @@ void siegecheck(bool canseethings)
              && !LCSrandom(600)
              && numpres>0)
          {
-            location[l]->siege.timeuntilcorps=LCSrandom(3)+1;
+            location[l]->siege.timeuntilcorps = (short) LCSrandom(3) + 1;
             // *JDS* CEO sleepers may give a warning before corp raids
             int ceosleepercount=0;
             for(int pl=0;pl<len(pool);pl++)
@@ -731,7 +731,7 @@ void siegecheck(bool canseethings)
          {
             if(location[l]->heat&&location[l]->siege.timeuntilccs==-1&&!location[l]->siege.siege&&!LCSrandom(60)&&numpres>0)
             {
-               location[l]->siege.timeuntilccs=LCSrandom(3)+1;
+               location[l]->siege.timeuntilccs = (short) LCSrandom(3) + 1;
                // CCS sleepers may give a warning before raids
                int ccssleepercount=0;
                for(int pl=0;pl<len(pool);pl++)
@@ -812,7 +812,7 @@ void siegecheck(bool canseethings)
                         if(LCSrandom(2))
                         {
                            int namelength=len(pool[i]->name);
-                           pool[i]->blood-=LCSrandom(101-pool[i]->juice/10)+10;
+                           pool[i]->blood -= (short) LCSrandom(101 - pool[i]->juice / 10) + 10;
                            if(pool[i]->blood<0)
                            {
                               if(killed_x+namelength>78)
@@ -876,7 +876,7 @@ void siegecheck(bool canseethings)
             //CIA
          if(location[l]->heat&&location[l]->siege.timeuntilcia==-1&&!location[l]->siege.siege&&offended_cia&&!LCSrandom(300)&&numpres>0)
          {
-            location[l]->siege.timeuntilcia=LCSrandom(3)+1;
+            location[l]->siege.timeuntilcia = (short) LCSrandom(3) + 1;
             // *JDS* agent sleepers may give a warning before cia raids
             int agentsleepercount=0;
             for(int pl=0;pl<len(pool);pl++)
@@ -1005,7 +1005,7 @@ void siegecheck(bool canseethings)
          if(law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE && location[l]->siege.timeuntilfiremen==-1 && !location[l]->siege.siege &&
             offended_firemen && numpres>0 && location[l]->compound_walls & COMPOUND_PRINTINGPRESS && !LCSrandom(90))
          {
-            location[l]->siege.timeuntilfiremen=LCSrandom(3)+1;
+            location[l]->siege.timeuntilfiremen=(short)LCSrandom(3)+1;
 
             // Sleeper Firemen can warn you of an impending raid
             int firemensleepercount=0;
@@ -1258,7 +1258,7 @@ void siegeturn(bool clearformess)
             {
                if(!pool[p]->alive||pool[p]->location!=l) continue;
 
-               if(starving) pool[p]->blood-=LCSrandom(8)+4;
+               if(starving) pool[p]->blood-=(short)LCSrandom(8)+4;
 
                // Check if liberal starved to death.
                if(pool[p]->blood<=0)
@@ -2549,7 +2549,7 @@ void escapesiege(char won)
 
          //BASE EVERYONE LEFT AT HOMELESS SHELTER
          removesquadinfo(*pool[p]);
-         pool[p]->hiding=LCSrandom(3)+2;
+         pool[p]->hiding=(short)LCSrandom(3)+2;
          if(pool[p]->align == Alignment::LIBERAL) // not a hostage
             pool[p]->location=-1;
          else // hostages don't go into hiding, just shove em into the homeless shelter
@@ -2577,7 +2577,7 @@ void escapesiege(char won)
    location[cursite]->siege.siege=0;
    if(won&&location[cursite]->siege.siegetype==SIEGE_POLICE)
    {
-      location[cursite]->siege.timeuntillocated=LCSrandom(4)+4;
+      location[cursite]->siege.timeuntillocated=(short)LCSrandom(4)+4;
       location[cursite]->siege.escalationstate++;
       if(police_heat<4) police_heat++;
    }
