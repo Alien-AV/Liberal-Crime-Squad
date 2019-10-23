@@ -1622,25 +1622,15 @@ void show_victim_status(Creature *victim)
    mvaddstr(12,55,"Age: ");mvaddstr(12,66,victim->age);
 }
 
-vector<string>& split_string(const string &s, char delim, vector<string> &elems) {
-   ostringstream oss;
-   for(char c:s) {
-      if(c==' ')
-      {
-         elems.push_back(oss.str());
-         oss.str(string());
-      }
-      else if(c=='\n')
-      {
-         elems.push_back(oss.str());
-         elems.push_back("");
-         oss.str(string());
-      }
-      else oss<<c;
-   }
-   elems.push_back(oss.str());
-
-   return elems;
+vector<string> split_string(const std::string& str, char delim = ' ')
+{
+    vector<string> result;
+    std::stringstream ss(str);
+    std::string token;
+    while (std::getline(ss, token, delim)) {
+        result.push_back(token);
+    }
+    return result;
 }
 
 void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
@@ -1657,7 +1647,7 @@ void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
       }
    }
 
-   int cur_step=0,page=0,c=0,aug_c=0;
+   size_t cur_step=0,page=0,c=0,aug_c=0;
    vector<AugmentType *> aug_type;
    AugmentType *selected_aug;
 
@@ -1665,7 +1655,8 @@ void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
    {
       erase();
 
-      int y,p;
+      size_t p;
+      char y;
 
       switch(cur_step) {
 
@@ -1674,7 +1665,7 @@ void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
          mvaddstr(0,0,"Select a Liberal to perform experiments on");
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          mvaddstr(1,0,"컴컴NAME컴컴컴컴컴컴컴컴컴컴컴횴EALTH컴컴컴컴컴컴HEART컴컴컴컴AGE컴컴컴컴컴컴컴�");
-         for(p=page*19,y=2;p<len(temppool)&&p<page*19+19;p++,y++)
+         for(p=page*19,y=2;p<temppool.size()&&p<page*19+19;p++,y++)
          {
             set_color(COLOR_WHITE,COLOR_BLACK,0); //c==y+'a'-2);
             move(y,0);
@@ -1696,7 +1687,7 @@ void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
          //PAGE UP
          if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
          //PAGE DOWN
-         if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*19<len(temppool))page++;
+         if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*19<temppool.size())page++;
 
          if(c>='a'&&c<='s')
          {
@@ -1756,10 +1747,10 @@ void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
 
          set_color(COLOR_WHITE,COLOR_BLACK,0);
 
-         for(int x=0,y=4;x<aug_type.size();x++,y++)
+         for(size_t x=0;x<aug_type.size();x++)
          {
             //set_color(COLOR_WHITE,COLOR_BLACK,c==y+'1'-5);
-            mvaddchar(y,26,y+'1'-4);addstr(" - ");
+            mvaddchar(x+4,26,(char)x+'1');addstr(" - ");
             addstr(aug_type[x]->get_name());
          }
 
@@ -1808,7 +1799,7 @@ void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
 
          set_color(COLOR_WHITE,COLOR_BLACK,1);
          mvaddstr(6, 0, "Chance at Success: ");
-         int skills = cr->get_skill(SKILL_SCIENCE) + 0.5 * cr->get_skill(SKILL_FIRSTAID);
+         int skills = cr->get_skill(SKILL_SCIENCE) + (cr->get_skill(SKILL_FIRSTAID) / 2);
          int difficulty = selected_aug->get_difficulty();
          set_color(COLOR_WHITE, COLOR_BLACK, 0);
          addstr(to_string(100 * skills / difficulty));
@@ -1817,12 +1808,11 @@ void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          mvaddstr(9,0,"컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴");
 
-         vector<string> desc;
-         split_string(selected_aug->get_description(),' ',desc);
+         vector<string> desc = split_string(selected_aug->get_description(),' ');
 
          int chars_left=50;
          int line = 10;
-         for(int i=0;i<desc.size();i++)
+         for(size_t i=0;i<desc.size();i++)
          {
             if(desc[i].length()>50) continue;
             else if(desc[i] == "")
@@ -1831,14 +1821,14 @@ void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
                chars_left=50;
                continue;
             }
-            else if(chars_left<0||desc[i].length()>chars_left)
+            else if(chars_left<0||desc[i].length()>(size_t)chars_left)
             {
                line++;
                chars_left=50;
                i--;
                continue;
             }
-            else if(desc[i].length()<=chars_left)
+            else if(desc[i].length()<=(size_t)chars_left)
             {
                mvaddstr(line,50-chars_left,desc[i]);
                chars_left-=(desc[i].length()+1);
@@ -1859,7 +1849,7 @@ void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
             victim->blood-=100 - blood_saved;
 
             if(skills < difficulty &&
-               LCSrandom((double)100 * difficulty / skills) < 100)
+               LCSrandom((long)((double)100 * difficulty / skills)) < 100)
             {
                unsigned char* wound = nullptr;
 
