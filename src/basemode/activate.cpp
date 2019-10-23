@@ -1808,31 +1808,21 @@ void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          mvaddstr(9,0,"컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴");
 
-         vector<string> desc = split_string(selected_aug->get_description(),' ');
+         vector<string> description_words = split_string(selected_aug->get_description(), ' ');
 
-         int chars_left=50;
+         size_t chars_left=50;
          int line = 10;
-         for(size_t i=0;i<desc.size();i++)
+         for(auto &description_word : description_words)
          {
-            if(desc[i].length()>50) continue;
-            else if(desc[i] == "")
-            {
-               line++;
-               chars_left=50;
-               continue;
-            }
-            else if(chars_left<0||desc[i].length()>(size_t)chars_left)
-            {
-               line++;
-               chars_left=50;
-               i--;
-               continue;
-            }
-            else if(desc[i].length()<=(size_t)chars_left)
-            {
-               mvaddstr(line,50-chars_left,desc[i]);
-               chars_left-=(desc[i].length()+1);
-            }
+             std::cout << description_word << std::endl;
+             if(description_word.length() > 50) continue;
+             if(description_word.length() + 1 > chars_left)
+             {
+                 line++;
+                 chars_left=50;
+             }
+             mvaddstr(line,50-chars_left, description_word);
+             chars_left -= description_word.length() + 1;
          }
 
          mvaddstr(23,1,"Are you sure? (y/n)");
