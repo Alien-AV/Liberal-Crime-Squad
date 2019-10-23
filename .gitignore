@@ -29,6 +29,9 @@ stamp-h1
 /workspaces/Release/*.pdb
 /workspaces/Release/*.tlog
 
+.idea/
+cmake-build-*/
+
 # Keep these separate from the above because order is important.
 !config.aux/tap-driver.sh
 !config.m4/ax_cxx_compile_stdcxx_11.m4
