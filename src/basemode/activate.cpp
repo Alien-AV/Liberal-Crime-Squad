@@ -1814,7 +1814,6 @@ void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
          int line = 10;
          for(auto &description_word : description_words)
          {
-             std::cout << description_word << std::endl;
              if(description_word.length() > 50) continue;
              if(description_word.length() + 1 > chars_left)
              {
