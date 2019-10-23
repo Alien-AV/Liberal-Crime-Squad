@@ -25,12 +25,12 @@ missing
 stamp-h1
 /workspaces/game.sdf
 /workspaces/game.v11.suo
-/workspaces/Release/*.obj
-/workspaces/Release/*.pdb
-/workspaces/Release/*.tlog
+/workspaces/Release/
+/workspaces/Debug/
 
 .idea/
 cmake-build-*/
+.vs/
 
 # Keep these separate from the above because order is important.
 !config.aux/tap-driver.sh
