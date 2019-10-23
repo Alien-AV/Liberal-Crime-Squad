@@ -2417,7 +2417,7 @@ void escape_engage()
                         squad[squad_index]->squad[squaddie_index]->squadid = -1;
                     }
                 }
-                squads_saved_for_restoration_after_siege.insert(squads_saved_for_restoration_after_siege.cbegin(), squad[squad_index]);
+                squads_saved_for_restoration_after_siege.insert(squads_saved_for_restoration_after_siege.begin(), squad[squad_index]);
                 squad.erase(squad.begin() + squad_index);
             } else activesquad = squad[squad_index];
         }
