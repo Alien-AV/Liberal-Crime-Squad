@@ -1,0 +1,164 @@
+cmake_minimum_required(VERSION 3.12)
+project(src)
+
+set(CMAKE_CXX_STANDARD 14)
+
+add_definitions(-DDONT_INCLUDE_SDL -D_CRT_SECURE_NO_WARNINGS) #todo: disable "no warnings"
+include_directories(../lib/libsdl2/include ../lib/pdcurses)
+link_directories(../lib/libsdl2/cmake-build-release/ ../lib/pdcurses/cmake-build-release/)
+link_libraries(SDL2 pdcurses)
+
+include_directories(.)
+include_directories(common)
+include_directories(creature)
+include_directories(daily)
+include_directories(items)
+include_directories(locations)
+include_directories(log)
+include_directories(monthly)
+include_directories(news)
+include_directories(politics)
+include_directories(sitemode)
+include_directories(vehicle)
+
+add_executable(src
+        basemode/activate.cpp
+        basemode/activate_sleepers.cpp
+        basemode/baseactions.cpp
+        basemode/basemode.cpp
+        basemode/liberalagenda.cpp
+        basemode/reviewmode.cpp
+        combat/chase.cpp
+        combat/fight.cpp
+        combat/haulkidnap.cpp
+        common/commonactions.cpp
+        common/commondisplay.cpp
+        common/consolesupport.cpp
+        common/equipment.cpp
+        common/getnames.cpp
+        common/help.cpp
+        common/interval.cpp
+        common/interval.h
+        common/misc.cpp
+        common/stringconversion.cpp
+        common/translateid.cpp
+        creature/attributes.cpp
+        creature/attributes.h
+        creature/augmentation.cpp
+        creature/augmentation.h
+        creature/augmenttype.cpp
+        creature/augmenttype.h
+        creature/creature.cpp
+        creature/creature.h
+        creature/creaturenames.cpp
+        creature/creaturetype.cpp
+        creature/creaturetype.h
+        creature/creaturetypecache.cpp
+        creature/creaturetypecache.h
+        creature/creaturetypes.cpp
+        creature/gender.h
+        creature/skill.cpp
+        creature/skill.h
+        daily/activities.cpp
+        daily/activities.h
+        daily/daily.cpp
+        daily/daily.h
+        daily/date.cpp
+        daily/date.h
+        daily/interrogation.cpp
+        daily/recruit.cpp
+        daily/recruit.h
+        daily/shopsnstuff.cpp
+        daily/shopsnstuff.h
+        daily/siege.cpp
+        daily/siege.h
+        items/armor.cpp
+        items/armor.h
+        items/armortype.cpp
+        items/armortype.h
+        items/clip.cpp
+        items/clip.h
+        items/cliptype.cpp
+        items/cliptype.h
+        items/item.cpp
+        items/item.h
+        items/itemtype.cpp
+        items/itemtype.h
+        items/loot.cpp
+        items/loot.h
+        items/loottype.cpp
+        items/loottype.h
+        items/money.cpp
+        items/money.h
+        items/weapon.cpp
+        items/weapon.h
+        items/weapontype.cpp
+        items/weapontype.h
+        locations/locations.cpp
+        locations/locations.h
+        locations/world.cpp
+        locations/world.h
+        log/log.cpp
+        log/log.h
+        monthly/justice.cpp
+        monthly/justice.h
+        monthly/lcsmonthly.cpp
+        monthly/monthly.cpp
+        monthly/monthly.h
+        monthly/sleepers.cpp
+        monthly/sleepers.h
+        news/ads.cpp
+        news/headline.cpp
+        news/layout.cpp
+        news/majorevent.cpp
+        news/news.cpp
+        news/news.h
+        news/squadstory_text.cpp
+        politics/alignment.cpp
+        politics/alignment.h
+        politics/amendments.cpp
+        politics/amendments.h
+        politics/law.cpp
+        politics/law.h
+        politics/politics.cpp
+        politics/politics.h
+        sitemode/advance.cpp
+        sitemode/mapspecials.cpp
+        sitemode/miscactions.cpp
+        sitemode/newencounter.cpp
+        sitemode/shop.cpp
+        sitemode/shop.h
+        sitemode/sitedisplay.cpp
+        sitemode/sitemap.cpp
+        sitemode/sitemap.h
+        sitemode/sitemode.cpp
+        sitemode/stealth.cpp
+        sitemode/talk.cpp
+        title/highscore.cpp
+        title/initfile.cpp
+        title/newgame.cpp
+        title/saveload.cpp
+        title/titlescreen.cpp
+        vehicle/vehicle.cpp
+        vehicle/vehicle.h
+        vehicle/vehicletype.cpp
+        vehicle/vehicletype.h
+        common.h
+        compat.cpp
+        compat.h
+        configfile.cpp
+        configfile.h
+        cursesgraphics.cpp
+        cursesgraphics.h
+        cursesmovie.cpp
+        cursesmovie.h
+        externs.h
+        game.cpp
+        globals.cpp
+        includes.h
+        lcsio.cpp
+        lcsio.h
+        tinydir.h
+        tinyxml2.cpp
+        tinyxml2.h
+        common/squad.cpp)
