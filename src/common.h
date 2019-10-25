@@ -224,7 +224,7 @@ inline int raw_output(bool bf)
 
 #ifndef ABS
    // absolute value of a number
-   #define ABS(x) ((x)<0)?(-x):(x)
+   #define ABS(x) (((x)<0)?(-x):(x))
 #endif
 
 #ifndef DIFF
