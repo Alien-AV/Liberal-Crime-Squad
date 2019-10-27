@@ -24,7 +24,7 @@ AC_PROG_CXX
 AC_LANG(C++)
 
 old_cxxflags=$CXXFLAGS
-AX_CXX_COMPILE_STDCXX_11([noext],[mandatory])
+AX_CXX_COMPILE_STDCXX_17([noext],[mandatory])
 AM_CXXFLAGS=$CXXFLAGS
 AC_SUBST([AM_CXXFLAGS])
 CXXFLAGS=$old_cxxflags
