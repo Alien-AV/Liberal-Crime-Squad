@@ -31,7 +31,7 @@ libcrimesquad_la_SOURCES = \
  common/equipment.cpp creature/augmentation.cpp \
  common/interval.h             common/interval.cpp \
  common/misc.cpp common/help.cpp creature/augmentation.h \
- common/stringconversion.cpp \
+ common/stringconversion.cpp common/squad.cpp \
  configfile.h                  configfile.cpp \
  creature/attributes.h         creature/attributes.cpp \
  creature/creature.h           creature/creature.cpp \
