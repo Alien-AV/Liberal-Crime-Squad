@@ -4,8 +4,12 @@ project(crimesquad)
 set(CMAKE_CXX_STANDARD 14)
 
 add_definitions(-DDONT_INCLUDE_SDL -D_CRT_SECURE_NO_WARNINGS) #todo: disable "no warnings"
-include_directories(lib/libsdl2/include lib/pdcurses)
-link_directories(lib/libsdl2/cmake-build-release/ lib/pdcurses/cmake-build-release/)
+
+add_subdirectory(lib/libsdl2)
+
+include_directories(lib/pdcurses)
+link_directories(lib/pdcurses/cmake-build-release/)
+
 link_libraries(SDL2 pdcurses)
 
 include_directories(src)
