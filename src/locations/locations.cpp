@@ -302,60 +302,41 @@ Location::duplicatelocation()
 void
 Location::update_heat_protection()
 {
-  int l;
-  for (l = 0; l < len(location); l++)
-  {
-    if (location[l] == this)
-      break;
-  }
-  if (l == len(location))
-  {
-    heat_protection = 0;
-    return;
-  }
-  int numpres = 0;
   heat_protection = 0;
-  for (int p = 0; p < len(pool); p++)
-  {
-    if (pool[p]->location != l)
-      continue; // People not at this base don't count
-    if (!pool[p]->alive)
-      continue; // Dead people don't count
-    numpres++;
-  }
 
   // Determine how effective your current safehouse
   // is at keeping the police confused
-  switch (location[l]->type)
+  switch (type)
   {
     case SITE_INDUSTRY_WAREHOUSE:
-      if (location[l]->front_business != -1)
-        heat_protection += 12; // Business front -- high protection
-      else
-        heat_protection += 0; // Abandoned warehouse -- no protection
+      heat_protection = 0; // Abandoned warehouse -- no protection
       break;
     case SITE_RESIDENTIAL_SHELTER:
-      heat_protection += 0; // Homeless shelter -- no protection
+      heat_protection = 0; // Homeless shelter -- no protection
       break;
     case SITE_RESIDENTIAL_TENEMENT:
-      heat_protection += 4; // Lower class housing -- low protection
+      heat_protection = 4; // Lower class housing -- low protection
       break;
     case SITE_RESIDENTIAL_APARTMENT:
-      heat_protection += 8; // Middle class housing -- medium protection
+      heat_protection = 8; // Middle class housing -- medium protection
       break;
     case SITE_RESIDENTIAL_BOMBSHELTER:
     case SITE_OUTDOOR_BUNKER:
     case SITE_BUSINESS_BARANDGRILL:
     case SITE_RESIDENTIAL_APARTMENT_UPSCALE:
-      heat_protection += 12; // Upper class housing -- high protection
+      heat_protection = 12; // Upper class housing -- high protection
       break;
   }
 
-  if (law[LAW_FLAGBURNING] == Alignment::ARCH_CONSERVATIVE && location[l]->haveflag)
+  if(has_business_front()){
+      heat_protection = 12;
+  }
+
+  if (law[LAW_FLAGBURNING] == Alignment::ARCH_CONSERVATIVE && haveflag)
     heat_protection += 6; // More protection if the flag is sacred
-  else if (law[LAW_FLAGBURNING] != Alignment::ARCH_CONSERVATIVE && location[l]->haveflag)
+  else if (law[LAW_FLAGBURNING] != Alignment::ARCH_CONSERVATIVE && haveflag)
     heat_protection += 2; // Some if the flag isn't
-  else if (law[LAW_FLAGBURNING] == Alignment::ARCH_CONSERVATIVE && !(location[l]->haveflag))
+  else if (law[LAW_FLAGBURNING] == Alignment::ARCH_CONSERVATIVE && !(haveflag))
     heat_protection -= 2; // Lose some if it is and you have no flag
   else
   {
