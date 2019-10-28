@@ -62,7 +62,7 @@
 #include "externs.h"
 #include "locations/world.h"
 #include "politics/politics.h"
-
+#include <algorithm>
 
 void doActivitySolicitDonations(vector<Creature *> &solicit, char &clearformess);
 void doActivitySellTshirts(vector<Creature *> &tshirts, char &clearformess);

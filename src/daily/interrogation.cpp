@@ -24,6 +24,7 @@
  * by copying code from game.cpp into monthly/endgame.cpp.
  */
 #include <externs.h>
+#include <algorithm>
 
 // Macro dumps interrogation data to screen for debug
 #ifdef INTERROGATION_DEBUG

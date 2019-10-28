@@ -27,7 +27,7 @@
 #include "daily/date.h"
 #include "externs.h"
 #include "locations/world.h"
-
+#include <algorithm>
 
 enum DateResults
 {

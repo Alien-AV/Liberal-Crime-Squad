@@ -21,6 +21,7 @@
  */
 #include "daily/recruit.h"
 #include <externs.h>
+#include <algorithm>
 
 /* recruit struct constructor */
 recruitst::recruitst() : timeleft(0), level(0), eagerness1(0), task(0)

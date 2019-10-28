@@ -25,6 +25,7 @@
  */
 
 #include <externs.h>
+#include <algorithm>
 
 /* handles end of round stuff for everyone */
 void creatureadvance()

@@ -28,7 +28,7 @@
 #include "externs.h"
 #include <sstream>
 #include "tinyxml2.h"
-
+#include <algorithm>
 
 namespace
 {

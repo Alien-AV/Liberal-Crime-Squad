@@ -28,7 +28,7 @@
 #include <externs.h>
 #include "politics/politics.h"
 #include "tinyxml2.h"
-
+#include <algorithm>
 
 namespace
 {

@@ -31,7 +31,7 @@
 #include "politics/politics.h"
 #include <sstream>
 #include "tinyxml2.h"
-
+#include <algorithm>
 
 namespace
 {

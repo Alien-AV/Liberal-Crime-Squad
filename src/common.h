@@ -49,7 +49,6 @@
 #endif
 #  define WIN32_LEAN_AND_MEAN
 #  include <windows.h>
-#  include <algorithm>
 #  ifdef KEY_EVENT
 #    undef KEY_EVENT
 #  endif
