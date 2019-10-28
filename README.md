@@ -1,7 +1,7 @@
 Liberal Crime Squad
 ===================
 
-[![Build Status](https://travis-ci.org/bregma/Liberal-Crime-Squad.svg?branch=master)](https://travis-ci.org/bregma/Liberal-Crime-Squad)
+[![Build Status](https://travis-ci.org/Alien-AV/Liberal-Crime-Squad.svg?branch=master)](https://travis-ci.org/Alien-AV/Liberal-Crime-Squad)
 
 On Febuary 4, 1974, the Symbionese Liberation Army, an American self-styled
 urban gurrilla warfare group kidnapped 19-year-old media heiress Patricia Hearst
@@ -16,26 +16,12 @@ on the classic 1983 RPG Oubliette.
 This Fork
 ---------
 
-LCS was originally developed by Tarn Adams at Bay 12 Games (2002-2004).  It was
-then taken over by community developers lead by Jonathan Stickles and Chris Johnson
-hosted at SourceForge (2007-2014).  This fork is derived from Kamal Sadek's augmentation
-fork ar GitHub.  It's purely a sandbox version, but since it's licensed under
-the GPLv2+, I can make any modifications I want as along as I make the source
-available, and if anyone is uncomfortable with that let me know and I'll change
-the name of the project.
+This fork aims to merge the best features from most advanced existing forks (Currently forks of bregma and king-drake on GitHub), and do some bugfixing, and minimal refactoring.
+Refactoring scope is planned to be limited to the areas that require change, for preparation to the change itself, so-called Boy Scout Principle.
 
 Building From Source
 --------------------
 
-I'm a fan of automated integration, and to that end I have set up an automated
-integration build from the GitHub repo through the Travis-CI service.  I'm
-targeting Win32, Win64, and Linux binaries, and everything is built or
-cross-built on a Linux host.  I've removed most of the support for building
-though an arbitrary IDE:  if you want to clone the code and build, you're going
-to need a POSIX shell and tools or a GUI that can cope with an autotool build
-directly.  It's my sandbox, I get to be tinpot about it.
-
-*If it's too serious for you, just skip it -- we don't take the game seriously,
-either, so no worries.*
+Currently autotools build, adding cmake build is in progress.
 
 **Go Forth, and Pursue your Liberal Agenda!**
