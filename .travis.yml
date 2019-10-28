@@ -54,4 +54,4 @@ script:
 
 notifications:
   email:
-    - bregma@users.noreply.github.com
+    - alienav@users.noreply.github.com
