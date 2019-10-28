@@ -8,7 +8,7 @@ config.aux
 config.h
 config.h.in
 config.log
-config.m4
+config.m4/*
 config.status
 configure
 crimesquad
