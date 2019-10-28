@@ -1,13 +1,9 @@
 sudo: false
-dist: trusty
+dist: bionic
 language: generic
 
 git:
   depth: 3
-
-branches:
-  only:
-  - master
 
 matrix:
   include:
@@ -17,23 +13,22 @@ matrix:
           sources:
             - ubuntu-toolchain-r-test
           packages:
-            - g++-5
+            - g++
       env:
         - BUILD_TARGET=linux
-        - COMPILER=g++-5
+        - COMPILER=g++
     - compiler: clang
       env: BUILD_TARGET=linux
       addons:
         apt:
           sources:
             - ubuntu-toolchain-r-test
-            - llvm-toolchain-trusty-4.0
           packages:
-            - g++-5
-            - clang-4.0
+            - g++
+            - clang
       env:
         - BUILD_TARGET=linux
-        - COMPILER=clang++-4.0
+        - COMPILER=clang++
     - compiler: x86_64-w64-mingw
       addons:
         apt:
