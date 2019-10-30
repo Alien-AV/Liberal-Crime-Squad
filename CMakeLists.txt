@@ -5,12 +5,14 @@ set(CMAKE_CXX_STANDARD 14)
 
 add_definitions(-DDONT_INCLUDE_SDL -D_CRT_SECURE_NO_WARNINGS) #todo: disable "no warnings"
 
+set( SDL_STATIC ON CACHE BOOL "" FORCE )
+set( SDL_SHARED OFF CACHE BOOL "" FORCE )
 add_subdirectory(lib/libsdl2)
 
 include_directories(lib/pdcurses)
 link_directories(lib/pdcurses/cmake-build-release/)
 
-link_libraries(SDL2 pdcurses)
+link_libraries(SDL2-static pdcurses)
 
 include_directories(src)
 include_directories(src/common)
