@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.15)
+cmake_minimum_required(VERSION 3.10)
 project(crimesquad)
 
 set(CMAKE_CXX_STANDARD 14)
@@ -9,10 +9,17 @@ set( SDL_STATIC ON CACHE BOOL "" FORCE )
 set( SDL_SHARED OFF CACHE BOOL "" FORCE )
 add_subdirectory(lib/libsdl2)
 
-include_directories(lib/pdcurses)
-link_directories(lib/pdcurses/cmake-build-release/)
+if(WIN32 OR MSVC)
+    add_subdirectory(lib/pdcurses)
+    link_libraries(pdcurses)
+else()
+    set(CURSES_NEED_NCURSES TRUE)
+    find_package(Curses REQUIRED)
+    include_directories(${CURSES_INCLUDE_DIRS})
+    link_libraries(${CURSES_LIBRARIES})
+endif()
 
-link_libraries(SDL2-static pdcurses)
+link_libraries(SDL2-static)
 
 include_directories(src)
 include_directories(src/common)
