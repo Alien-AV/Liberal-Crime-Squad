@@ -5,7 +5,7 @@ set(CMAKE_C_STANDARD 11)
 
 include_directories(../libsdl2/include)
 link_directories(../libsdl2/cmake-build-release/) #todo: do correctly
-link_libraries(SDL2)
+link_libraries(SDL2-static)
 
 include_directories(.)
 include_directories(sdl2)
@@ -69,3 +69,9 @@ add_library(pdcurses
         touch.c
         util.c
         window.c)
+
+
+target_include_directories(pdcurses
+        PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        )
