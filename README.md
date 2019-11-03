@@ -22,6 +22,7 @@ Refactoring scope is planned to be limited to the areas that require change, for
 Building From Source
 --------------------
 
-Currently autotools build, adding cmake build is in progress.
+
+Uses pretty fonts from [here](https://sourceforge.net/projects/pdcurses/files/sdlfonts/).
 
 **Go Forth, and Pursue your Liberal Agenda!**
