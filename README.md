@@ -22,6 +22,7 @@ Refactoring scope is planned to be limited to the areas that require change, for
 Building From Source
 --------------------
 
+Use CMake. CLion, or the build-*.sh files, or building the CMakeLists.txt via Visual Studio (maybe with some pain) should work.
 
 Uses pretty fonts from [here](https://sourceforge.net/projects/pdcurses/files/sdlfonts/).
 
