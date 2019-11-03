@@ -37,21 +37,13 @@ matrix:
       env:
         - BUILD_TARGET=win64
 
-before_script:
-  - mkdir build
-  - cd build
-  - if [ "$BUILD_TARGET" = "linux" ]; then
-      ../bootstrap CXX=$COMPILER --disable-silent-rules;
-    elif [ "$BUILD_TARGET" = "win64" ]; then
-      ../bootstrap --host=x86_64-w64-mingw32  --disable-silent-rules;
-    fi
-
 script:
-  - make -j2
   - if [ "$BUILD_TARGET" = "linux" ]; then
-      make check;
+      ./build-linux.sh;
+    elif [ "$BUILD_TARGET" = "win64" ]; then
+      ./build-cross-linux-to-mingw.sh;
     fi
 
 notifications:
   email:
-    - alienav@users.noreply.github.com
+    - alien-av@users.noreply.github.com

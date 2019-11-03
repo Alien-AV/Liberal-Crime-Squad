@@ -31,6 +31,8 @@ stamp-h1
 .idea/
 cmake-build-*/
 .vs/
+build-cross-linux-to-mingw/
+build-linux/
 
 # Keep these separate from the above because order is important.
 !config.aux/tap-driver.sh
