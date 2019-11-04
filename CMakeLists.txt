@@ -195,8 +195,16 @@ set_target_properties(crimesquad PROPERTIES
         RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}
         )
 
+execute_process(
+        COMMAND git log -1 --format=%h
+        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+        OUTPUT_VARIABLE GIT_COMMIT_HASH
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+
 add_custom_target(create_zip COMMAND
-        ${CMAKE_COMMAND} -E tar "cfv" "${CMAKE_CURRENT_SOURCE_DIR}/crimesquad.zip" --format=zip
+        ${CMAKE_COMMAND} -E tar "cfv"
+        "${CMAKE_CURRENT_SOURCE_DIR}/crimesquad-${CMAKE_SYSTEM_NAME}-${GIT_COMMIT_HASH}.zip" --format=zip
         "$<TARGET_FILE:crimesquad>"
         "${CMAKE_CURRENT_SOURCE_DIR}/art"
         "${CMAKE_CURRENT_SOURCE_DIR}/init.txt"
