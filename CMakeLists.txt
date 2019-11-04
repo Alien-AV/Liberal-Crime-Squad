@@ -194,3 +194,11 @@ add_executable(crimesquad
 set_target_properties(crimesquad PROPERTIES
         RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}
         )
+
+add_custom_target(create_zip COMMAND
+        ${CMAKE_COMMAND} -E tar "cfv" "${CMAKE_CURRENT_SOURCE_DIR}/crimesquad.zip" --format=zip
+        "$<TARGET_FILE:crimesquad>"
+        "${CMAKE_CURRENT_SOURCE_DIR}/art"
+        "${CMAKE_CURRENT_SOURCE_DIR}/init.txt"
+        "${CMAKE_CURRENT_SOURCE_DIR}/pdcfont.bmp"
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
