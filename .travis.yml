@@ -49,7 +49,7 @@ notifications:
     - alien-av@users.noreply.github.com
 
 before_deploy:
-  - if [ "$BUILD_TARGET" = "linux" ]; then
+  - if [ "$BUILD_TARGET" = "linux" ] && [ "$COMPILER" = "g++" ]; then
       cmake --build build-linux/ --target create_zip --;
     elif [ "$BUILD_TARGET" = "win64" ]; then
       cmake --build build-cross-linux-to-mingw/ --target create_zip --;
