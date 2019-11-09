@@ -21,6 +21,8 @@ link_libraries(pdcurses)
 
 link_libraries(SDL2-static)
 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static") # mingw build requires some ddls otherwise
+
 include_directories(src)
 include_directories(src/common)
 include_directories(src/creature)
