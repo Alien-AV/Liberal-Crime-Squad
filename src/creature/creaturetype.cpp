@@ -239,7 +239,7 @@ initialize_from_xml(std::string const& xml)
           const char*  weapon_type = e->GetText();
           Interval     weapon_count{1};
           const char*  clip_type{"APPROPRIATE"};
-          Interval     clip_count{0};
+          Interval     clip_count{4};
           if (weapon_type == nullptr)
           {
             for (auto we = e->FirstChildElement(); we; we = we->NextSiblingElement())
