@@ -365,7 +365,6 @@ mode_title()
 
       if(c=='h') {
          viewhighscores();
-         getkey();
          title_screen();
       }
 

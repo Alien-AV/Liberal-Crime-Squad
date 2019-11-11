@@ -49,6 +49,7 @@ void viewhighscores(int musicoverride)
    if(!validsum)
    {
       addstr("No valid scores, press any button to return.");
+      getkey();
       return;
    }
 
@@ -214,7 +215,7 @@ void viewhighscores(int musicoverride)
    addstr("Flags Burned: ");
    addstr(ustat_burns);
 
-   //getkey();
+   getkey();
 }
 
 /* loads the high scores file */
