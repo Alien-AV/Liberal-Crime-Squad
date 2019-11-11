@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 project(crimesquad)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 
 add_definitions(-DDONT_INCLUDE_SDL -D_CRT_SECURE_NO_WARNINGS) #todo: disable "no warnings"
 

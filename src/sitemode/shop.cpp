@@ -212,7 +212,7 @@ void Shop::browse_halfscreen(squadst& customers, int& buyer) const
 
    available_options.erase(remove_if(available_options.begin(),
 				               available_options.end(),
-				               not1(mem_fun(&ShopOption::display))),
+				               not_fn(&ShopOption::display)),
 			                  available_options.end());
 
    while(true)
@@ -352,7 +352,7 @@ void Shop::browse_fullscreen(squadst& customers, int& buyer) const
    std::vector<ShopOption*> available_options=options_;
    available_options.erase(remove_if(available_options.begin(),
 				               available_options.end(),
-				               not1(mem_fun(&ShopOption::display))),
+				               not_fn(&ShopOption::display)),
 			                  available_options.end());
 
    while(true)

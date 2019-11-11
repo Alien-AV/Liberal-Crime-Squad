@@ -24,24 +24,12 @@
  * by copying code from game.cpp into monthly/endgame.cpp.
  */
 
+#include <filesystem>
 #include "externs.h"
 #include "items/money.h"
-#include <sys/stat.h>
 #pragma GCC diagnostic ignored "-Wunused-result"
 
 // TODO: It would be really cool to be able to "export" characters.
-
-/* handles saving */
-
-bool file_exists(const std::string& filename)
-{
-   struct stat buf;
-   if (stat(filename.c_str(), &buf) != -1)
-   {
-      return false;
-   }
-   return true;
-}
 
 void savegame(const string& filename)
 {
@@ -753,8 +741,9 @@ char load(const string& filename)
 }
 
 /* deletes save.dat (used on endgame and for invalid save version) */
-void reset(const string& filename)
-{
-	if(file_exists(filename)) LCSDeleteFile(filename.c_str(),LCSIO_PRE_HOME);
+void reset(const string &filename) {
+    if (std::filesystem::exists(filename)) {
+        LCSDeleteFile(filename.c_str(), LCSIO_PRE_HOME);
+    }
 }
 
