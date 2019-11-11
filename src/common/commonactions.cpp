@@ -32,47 +32,57 @@
 
 
 /* common - test for possible game over */
-char endcheck(char cause)
-{
-   bool dead=true;
-   for(int p=0;p<len(pool)&&dead;p++)
-      if (pool[p]->alive && pool[p]->align == Alignment::LIBERAL
-        && !(pool[p]->flag&CREATUREFLAG_SLEEPER&&pool[p]->hireid!=-1)) // Allow sleepers to lead LCS without losing
-         dead=false;
+char endcheck(char cause) {
+    bool dead = true;
+    for (int p = 0; p < len(pool) && dead; p++) {
+        if (pool[p]->alive
+            && pool[p]->align == Alignment::LIBERAL
+            && !(pool[p]->flag & CREATUREFLAG_SLEEPER
+            && pool[p]->hireid != -1)) // Allow sleepers to lead LCS without losing
+        {
+            dead = false;
+        }
+    }
 
-   if(dead) // Did we just lose the game?
-   {  // Game Over
-      if(cause==-2)
-      {  // just checking for game over ahead of time but going back to the code for more stuff
-         music.play(MUSIC_DEFEAT); // we were defeated, so play the right music
-         return true; // go back to code, it has more text to display before we REALLY end the game
-      }
-      // OK if we didn't return yet it's REALLY Game Over, right now, but we need to find out why
-      if(cause==-1)
-      {  // got killed, possibly in a siege but maybe not, find out the reason we lost
-         if(location[cursite]->siege.siege)
-         {
-            switch(location[cursite]->siege.siegetype)
-            {
-            case SIEGE_POLICE: savehighscore(END_POLICE); break;
-            case SIEGE_CIA: savehighscore(END_CIA); break;
-            case SIEGE_HICKS: savehighscore(END_HICKS); break;
-            case SIEGE_CORPORATE: savehighscore(END_CORP); break;
-            case SIEGE_CCS: savehighscore(END_CCS); break;
-            case SIEGE_FIREMEN: savehighscore(END_FIREMEN); break;
-            }
-         }
-         else savehighscore(END_DEAD);
-      }
-      else savehighscore(cause); // the reason we lost was specified in the function call
-      // You just lost the game!
-      reset(savefile_name);
-      viewhighscores();
-      exit(0);
-      return true;
-   }
 
-   return false; // Hey, we're still alive! We get to keep playing!
+    if (dead) // Did we just lose the game?
+    {  // Game Over
+        if (cause == -2) {  // just checking for game over ahead of time but going back to the code for more stuff
+            music.play(MUSIC_DEFEAT); // we were defeated, so play the right music
+            return true; // go back to code, it has more text to display before we REALLY end the game
+        }
+        // OK if we didn't return yet it's REALLY Game Over, right now, but we need to find out why
+        if (cause == -1) {  // got killed, possibly in a siege but maybe not, find out the reason we lost
+            if (location[cursite]->siege.siege) {
+                switch (location[cursite]->siege.siegetype) {
+                    case SIEGE_POLICE:
+                        savehighscore(END_POLICE);
+                        break;
+                    case SIEGE_CIA:
+                        savehighscore(END_CIA);
+                        break;
+                    case SIEGE_HICKS:
+                        savehighscore(END_HICKS);
+                        break;
+                    case SIEGE_CORPORATE:
+                        savehighscore(END_CORP);
+                        break;
+                    case SIEGE_CCS:
+                        savehighscore(END_CCS);
+                        break;
+                    case SIEGE_FIREMEN:
+                        savehighscore(END_FIREMEN);
+                        break;
+                }
+            } else savehighscore(END_DEAD);
+        } else savehighscore(cause); // the reason we lost was specified in the function call
+        // You just lost the game!
+        reset(savefile_name);
+        viewhighscores();
+        exit(0);
+        return true;
+    }
+    return false; // Hey, we're still alive! We get to keep playing!
 }
 
 /* common - tests if the person is a wanted criminal */
