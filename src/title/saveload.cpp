@@ -24,7 +24,7 @@
  * by copying code from game.cpp into monthly/endgame.cpp.
  */
 
-#include <filesystem>
+#include <experimental/filesystem>
 #include "externs.h"
 #include "items/money.h"
 #pragma GCC diagnostic ignored "-Wunused-result"
@@ -742,7 +742,7 @@ char load(const string& filename)
 
 /* deletes save.dat (used on endgame and for invalid save version) */
 void reset(const string &filename) {
-    if (std::filesystem::exists(filename)) {
+    if (std::experimental::filesystem::exists(filename)) {
         LCSDeleteFile(filename.c_str(), LCSIO_PRE_HOME);
     }
 }
