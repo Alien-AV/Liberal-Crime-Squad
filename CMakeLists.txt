@@ -21,10 +21,9 @@ link_libraries(pdcurses)
 
 link_libraries(SDL2-static)
 
-link_libraries(stdc++fs)
-
 if(MSVC)
 else()
+    link_libraries(stdc++fs)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static") # mingw build requires some ddls otherwise
 endif()
 
