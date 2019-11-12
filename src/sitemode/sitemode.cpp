@@ -369,7 +369,7 @@ void mode_site()
          if(partysize>1)set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
          move(11,1);
-         addstr("O - Change the squad's Liberal order");
+         addstr("O - Sqd Order");
          if(partysize>0&&(party_status==-1||partysize>1))set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
          move(12,1);
@@ -386,7 +386,7 @@ void mode_site()
          addstr("G - Get Loot");
 
          set_color(COLOR_WHITE,COLOR_BLACK,0);
-         move(10,17);
+         move(10,42);
          addstr("N - Options");
 
          set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -399,8 +399,13 @@ void mode_site()
 
          if(!enemy||!sitealarm) set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
-         move(10,42);
+         move(10,17);
          addstr("L - Reload");
+
+          if(!enemy||!sitealarm) set_color(COLOR_WHITE,COLOR_BLACK,0);
+          else set_color(COLOR_BLACK,COLOR_BLACK,1);
+          move(11,17);
+          addstr("P - Rld Empty");
 
          if(enemy) set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
@@ -952,6 +957,15 @@ void mode_site()
             creatureadvance();
             encounter_timer++;
          }
+
+          if(c=='p'&&(!enemy||!sitealarm))
+          {
+              reloadparty();
+              printparty();
+              refresh();
+              creatureadvance();
+              encounter_timer++;
+          }
 
          if(c=='o'&&partysize>1)orderparty();
 
